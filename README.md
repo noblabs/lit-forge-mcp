@@ -1,5 +1,9 @@
 # lit-forge MCP server
 
+[![npm version](https://img.shields.io/npm/v/lit-forge-mcp.svg)](https://www.npmjs.com/package/lit-forge-mcp)
+[![license](https://img.shields.io/npm/l/lit-forge-mcp.svg)](./LICENSE)
+[![node](https://img.shields.io/node/v/lit-forge-mcp.svg)](https://nodejs.org)
+
 [lit-forge.com](https://lit-forge.com) の開発者向けユーティリティを Model Context Protocol（MCP）経由で AI から直接呼び出せるようにする stdio サーバーです。
 
 Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI クライアントで動作します。
