@@ -1,6 +1,7 @@
 {
   "name": "lit-forge-mcp",
-  "version": "0.1.1",
+  "version": "0.1.2",
+  "mcpName": "io.github.noblabs/lit-forge-mcp",
   "description": "MCP server exposing lit-forge.com developer utilities (JSON / regex / JWT / Base64 / URL / hash / UUID / timestamp / YAML↔JSON / cron) as callable tools.",
   "type": "module",
   "license": "MIT",

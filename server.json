@@ -1,0 +1,20 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.noblabs/lit-forge-mcp",
+  "description": "10 zero-auth dev utilities (JSON, regex, JWT, base64, hash, UUID, timestamp, YAML/JSON, cron).",
+  "repository": {
+    "url": "https://github.com/noblabs/lit-forge-mcp",
+    "source": "github"
+  },
+  "version": "0.1.2",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "lit-forge-mcp",
+      "version": "0.1.2",
+      "transport": {
+        "type": "stdio"
+      }
+    }
+  ]
+}
