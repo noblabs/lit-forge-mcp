@@ -1,13 +1,13 @@
 {
   "name": "lit-forge-mcp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "MCP server exposing lit-forge.com developer utilities (JSON / regex / JWT / Base64 / URL / hash / UUID / timestamp / YAML↔JSON / cron) as callable tools.",
   "type": "module",
   "license": "MIT",
   "homepage": "https://lit-forge.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/noblabs/lit-forge-mcp"
+    "url": "git+https://github.com/noblabs/lit-forge-mcp.git"
   },
   "bugs": {
     "url": "https://github.com/noblabs/lit-forge-mcp/issues"
@@ -26,7 +26,7 @@
     "cron"
   ],
   "bin": {
-    "lit-forge-mcp": "./dist/index.js"
+    "lit-forge-mcp": "dist/index.js"
   },
   "files": [
     "dist",
