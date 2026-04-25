@@ -1,0 +1,57 @@
+{
+  "name": "lit-forge-mcp",
+  "version": "0.1.0",
+  "description": "MCP server exposing lit-forge.com developer utilities (JSON / regex / JWT / Base64 / URL / hash / UUID / timestamp / YAML↔JSON / cron) as callable tools.",
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://lit-forge.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/noblabs/lit-forge-mcp"
+  },
+  "bugs": {
+    "url": "https://github.com/noblabs/lit-forge-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "developer-tools",
+    "json",
+    "regex",
+    "jwt",
+    "base64",
+    "uuid",
+    "yaml",
+    "cron"
+  ],
+  "bin": {
+    "lit-forge-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc && chmod 755 dist/index.js",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "cron-parser": "^5.5.0",
+    "cronstrue": "^3.14.0",
+    "js-yaml": "^4.1.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
