@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// lit-forge MCP server エントリポイント。stdio で起動し、10 ツールを登録する。
+// lit-forge MCP server エントリポイント。stdio で起動し、NISA / iDeCo 個人資産形成
+// プランナー系 4 ツールを登録する。
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
@@ -8,7 +9,7 @@ import { tools } from "./tools/index.js";
 
 const server = new McpServer({
   name: "lit-forge",
-  version: "0.1.0",
+  version: "0.2.0",
 });
 
 for (const tool of tools) {

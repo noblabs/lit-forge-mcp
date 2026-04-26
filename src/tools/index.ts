@@ -1,25 +1,16 @@
 // 全ツールを集約してエクスポート。新しいツール追加時はここに 1 行足す。
+//
+// v0.2.0 で「金融・個人投資家特化」にピボット。旧 dev utility 10 ツールを廃止し、
+// つみたて NISA・iDeCo を中心とした資産形成プランナー系 4 ツールに刷新。
 
-import { formatJson } from "./format-json.js";
-import { testRegex } from "./test-regex.js";
-import { decodeJwt } from "./decode-jwt.js";
-import { convertBase64 } from "./convert-base64.js";
-import { convertUrl } from "./convert-url.js";
-import { generateHash } from "./generate-hash.js";
-import { generateUuid } from "./generate-uuid.js";
-import { convertTimestamp } from "./convert-timestamp.js";
-import { convertYamlJson } from "./convert-yaml-json.js";
-import { describeCron } from "./describe-cron.js";
+import { simulateNisaTool } from "./simulate-nisa.js";
+import { planRetirementTool } from "./plan-retirement.js";
+import { calculateRequiredMonthlyTool } from "./calculate-required-monthly.js";
+import { calculateCompoundInterestTool } from "./calculate-compound-interest.js";
 
 export const tools = [
-  formatJson,
-  testRegex,
-  decodeJwt,
-  convertBase64,
-  convertUrl,
-  generateHash,
-  generateUuid,
-  convertTimestamp,
-  convertYamlJson,
-  describeCron,
+  simulateNisaTool,
+  planRetirementTool,
+  calculateRequiredMonthlyTool,
+  calculateCompoundInterestTool,
 ];

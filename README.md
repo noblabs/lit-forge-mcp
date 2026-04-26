@@ -4,26 +4,22 @@
 [![license](https://img.shields.io/npm/l/lit-forge-mcp.svg)](./LICENSE)
 [![node](https://img.shields.io/node/v/lit-forge-mcp.svg)](https://nodejs.org)
 
-[lit-forge.com](https://lit-forge.com) の開発者向けユーティリティを Model Context Protocol（MCP）経由で AI から直接呼び出せるようにする stdio サーバーです。
+[lit-forge.com](https://lit-forge.com) の **個人資産形成プランナー（つみたて NISA・iDeCo）** を Model Context Protocol（MCP）経由で AI から直接呼び出せるようにする stdio サーバーです。
 
 Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI クライアントで動作します。
 
-## 提供ツール（10 種）
+> **v0.2.0 で「金融・個人投資家特化」にピボット**しました。旧 dev ユーティリティ 10 ツール（JSON / regex / JWT / Base64 等）は廃止し、NISA / iDeCo / 退職資金プランニング系の 4 ツールに刷新しています。
+
+## 提供ツール（4 種）
 
 | ツール名 | 説明 |
 |---|---|
-| `format_json` | JSON 整形（pretty）/ 圧縮（minify） |
-| `test_regex` | 正規表現マッチ（JavaScript 互換、フラグ指定可、名前付きグループ対応） |
-| `decode_jwt` | JWT を Header / Payload / Signature に分解（exp/nbf/iat の人間可読化と有効期限判定つき） |
-| `convert_base64` | Base64 エンコード/デコード（UTF-8 / URL-safe 対応） |
-| `convert_url` | URL パーセントエンコード/デコード（component / URI 切替） |
-| `generate_hash` | MD5 / SHA-1 / SHA-256 / SHA-384 / SHA-512（hex / base64） |
-| `generate_uuid` | UUID v4 / v7 を最大 100 件まで一括生成 |
-| `convert_timestamp` | Unix 時刻 ⇔ ISO 8601 日時（秒/ミリ秒切替） |
-| `convert_yaml_json` | YAML ⇔ JSON 相互変換（js-yaml） |
-| `describe_cron` | cron 式を人間可読化 + 次回実行時刻を計算（IANA タイムゾーン対応） |
+| `simulate_nisa` | 月の積立額・想定年利・年数から、月次複利で評価額・運用益・年次推移を試算 |
+| `plan_retirement` | 年齢・貯蓄・収入・希望生活費・リスク許容度・年金から、楽観/現実/悲観 3 シナリオで老後資金の充足度を診断 + 必要月額逆算 |
+| `calculate_required_monthly` | 目標金額・現在の貯蓄・年利・年数から、達成に必要な毎月の積立額を逆算 |
+| `calculate_compound_interest` | 元本（一括）と月次積立を月次複利で評価する汎用複利計算ツール |
 
-すべて純関数（外部 API 不要・状態を持たない）で動作します。AI が出力した JSON を整形したり、JWT をデバッグしたり、UUID をテストデータとして大量生成したりするのに便利です。
+すべて純関数（外部 API 不要・状態を持たない）。Claude / GPT / Cursor との対話の中で「老後資金大丈夫？」「月いくら積み立てれば？」を即座に試算できます。
 
 ## インストール / 設定
 
@@ -74,17 +70,22 @@ echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":
 {"jsonrpc":"2.0","id":2,"method":"tools/list"}' | node dist/index.js
 ```
 
-`tools/list` のレスポンスに 10 ツールが並べば成功です。
+`tools/list` のレスポンスに 4 ツールが並べば成功です。
 
 ## 使用例
 
 Claude にこんな依頼ができます:
 
-- 「この JWT をデコードして payload の中身を見せて」
-- 「`name: foo\nlist: [1,2,3]` を JSON にして」
-- 「`0 9 * * 1-5` を日本語で説明して、次の 5 回の実行時刻も Asia/Tokyo で出して」
-- 「テストデータ用に UUID v7 を 20 個生成して」
-- 「`(\\w+)@(\\w+)` でメールアドレスをパースしたいんだけど、`alice@example.com bob@test.jp` で試して」
+- 「私は35歳で月3万を積立中。現在の貯蓄500万、退職65歳、月の希望生活費25万。老後資金足りる？」
+- 「20年で2000万作りたい。今500万あって年利4%なら毎月いくら積み立てればいい？」
+- 「100万円を年利5%で30年複利運用したらいくらになる？」
+- 「月3万円を年利6%で20年積み立てたら？」
+
+## 投資判断の免責
+
+本ツールの試算はすべて月次複利による参考値です。実際の運用結果（市場変動・税金・手数料・為替）を保証するものではありません。個別の金融商品の推奨ではなく、**投資判断はご自身の責任**でお願いします。
+
+公的年金額の概算は厚生年金の標準値ベースです。正確な見込み額は[ねんきんネット](https://www.nenkin.go.jp/n_net/)でご確認ください。
 
 ## ライセンス
 

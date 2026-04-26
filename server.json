@@ -1,17 +1,17 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.noblabs/lit-forge-mcp",
-  "description": "10 zero-auth dev utilities (JSON, regex, JWT, base64, hash, UUID, timestamp, YAML/JSON, cron).",
+  "description": "Personal asset planning: NISA/iDeCo sim, retirement planner, compound interest.",
   "repository": {
     "url": "https://github.com/noblabs/lit-forge-mcp",
     "source": "github"
   },
-  "version": "0.1.2",
+  "version": "0.2.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "lit-forge-mcp",
-      "version": "0.1.2",
+      "version": "0.2.0",
       "transport": {
         "type": "stdio"
       }
