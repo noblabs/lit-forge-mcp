@@ -9,7 +9,7 @@ import { tools } from "./tools/index.js";
 
 const server = new McpServer({
   name: "lit-forge",
-  version: "0.2.0",
+  version: "0.3.0",
 });
 
 for (const tool of tools) {

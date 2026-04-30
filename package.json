@@ -1,8 +1,8 @@
 {
   "name": "lit-forge-mcp",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "mcpName": "io.github.noblabs/lit-forge-mcp",
-  "description": "MCP server for personal asset planning: NISA / iDeCo simulation, retirement planning, required-monthly back-calc, compound interest.",
+  "description": "MCP server for personal asset planning + daily market check: NISA / iDeCo simulation, retirement planning, market snapshot (USD/JPY, Nikkei, S&P 500, etc.), economic event calendar.",
   "type": "module",
   "license": "MIT",
   "homepage": "https://lit-forge.com",
@@ -23,6 +23,10 @@
     "ideco",
     "retirement",
     "compound-interest",
+    "market-data",
+    "stock-quote",
+    "forex",
+    "economic-calendar",
     "japan"
   ],
   "bin": {
