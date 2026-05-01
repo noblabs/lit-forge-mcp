@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.noblabs/lit-forge-mcp",
-  "description": "Personal asset planning + daily market check: NISA/iDeCo simulation, retirement planner, market snapshot (28 indicators), economic events, market thermometer, performance ranking, yield spread, market sessions, sector heatmap.",
+  "description": "NISA/iDeCo sim, retirement planner, daily market snapshot, economic events. 12 tools, 28 indicators.",
   "repository": {
     "url": "https://github.com/noblabs/lit-forge-mcp",
     "source": "github"
