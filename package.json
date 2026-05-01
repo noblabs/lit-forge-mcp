@@ -1,6 +1,6 @@
 {
   "name": "lit-forge-mcp",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "mcpName": "io.github.noblabs/lit-forge-mcp",
   "description": "MCP server for personal asset planning + daily market check: NISA / iDeCo simulation, retirement planning, market snapshot (USD/JPY, Nikkei, S&P 500, etc.), economic event calendar.",
   "type": "module",
@@ -41,6 +41,8 @@
     "build": "tsc && chmod 755 dist/index.js",
     "start": "node dist/index.js",
     "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "prepare": "npm run build"
   },
   "dependencies": {
@@ -49,7 +51,8 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "typescript": "^5.6.0"
+    "typescript": "^5.6.0",
+    "vitest": "^4.1.0"
   },
   "engines": {
     "node": ">=18"

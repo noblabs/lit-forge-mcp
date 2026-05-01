@@ -1,17 +1,17 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.noblabs/lit-forge-mcp",
-  "description": "Personal asset planning: NISA/iDeCo sim, retirement planner, compound interest.",
+  "description": "Personal asset planning + daily market check: NISA/iDeCo simulation, retirement planner, market snapshot (28 indicators), economic events, market thermometer, performance ranking, yield spread, market sessions, sector heatmap.",
   "repository": {
     "url": "https://github.com/noblabs/lit-forge-mcp",
     "source": "github"
   },
-  "version": "0.2.0",
+  "version": "0.4.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "lit-forge-mcp",
-      "version": "0.2.0",
+      "version": "0.4.0",
       "transport": {
         "type": "stdio"
       }
