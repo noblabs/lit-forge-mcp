@@ -1,0 +1,60 @@
+{
+  "name": "lit-forge-mcp",
+  "version": "0.4.1",
+  "mcpName": "io.github.noblabs/lit-forge-mcp",
+  "description": "MCP server for personal asset planning + daily market check: NISA / iDeCo simulation, retirement planning, market snapshot (USD/JPY, Nikkei, S&P 500, etc.), economic event calendar.",
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://github.com/noblabs/lit-forge-mcp",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noblabs/lit-forge-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/noblabs/lit-forge-mcp/issues"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "claude",
+    "finance",
+    "investment",
+    "nisa",
+    "ideco",
+    "retirement",
+    "compound-interest",
+    "market-data",
+    "stock-quote",
+    "forex",
+    "economic-calendar",
+    "japan"
+  ],
+  "bin": {
+    "lit-forge-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc && chmod 755 dist/index.js",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^4.1.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
