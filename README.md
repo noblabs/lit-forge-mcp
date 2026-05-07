@@ -36,7 +36,7 @@ Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI �
 | `get_market_thermometer` | VIX・S&P 500・米10年金利・ドル指数を合成した 0-100 のリスクオン/オフ・スコア + 過去 30 営業日推移 |
 | `get_performance_ranking` | 28 銘柄を `1d`/`1w`/`1m` のパフォーマンスでソート、上位/下位 N 件を返す |
 | `get_yield_spread` | 米10年-5年イールドスプレッド（プラス=順イールド / マイナス=逆イールド） |
-| `get_market_sessions` | 主要 4 市場（東京・上海・ロンドン・NY）の現在の取引時間ステータス |
+| `get_market_sessions` | 主要 4 市場（東京・上海・ロンドン・NY）の現在の取引時間ステータス（open / pre-open / closed / **holiday**、v0.5.0 で祝日対応） |
 | `get_sector_heatmap` | 米株セクター ETF（SPDR、11 セクター）の前日比一覧 |
 
 > ⚠ **HTTP 通信について**: 市況・分析系ツールは **Yahoo Finance API（query1.finance.yahoo.com）** へ HTTPS リクエストを送信します。実行 PC のネットワークから外部に出る通信が発生する点にご留意ください。データは約 1 時間遅れの参考値で、**投資助言ではなく情報集約**として提供しています。
