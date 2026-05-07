@@ -1,6 +1,6 @@
 {
   "name": "lit-forge-mcp",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "mcpName": "io.github.noblabs/lit-forge-mcp",
   "description": "MCP server for personal asset planning + daily market check: NISA / iDeCo simulation, retirement planning, market snapshot (USD/JPY, Nikkei, S&P 500, etc.), economic event calendar.",
   "type": "module",
