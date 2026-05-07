@@ -54,7 +54,7 @@ Claude / GPT / Cursor との対話の中で「老後資金大丈夫？」「月�
   "mcpServers": {
     "lit-forge": {
       "command": "npx",
-      "args": ["-y", "lit-forge-mcp"]
+      "args": ["-y", "lit-forge-mcp@latest"]
     }
   }
 }
@@ -67,12 +67,22 @@ Claude / GPT / Cursor との対話の中で「老後資金大丈夫？」「月�
 ### Claude Code の場合
 
 ```bash
-claude mcp add lit-forge -- npx -y lit-forge-mcp
+claude mcp add lit-forge -- npx -y lit-forge-mcp@latest
 ```
 
 ### Cursor の場合
 
 `~/.cursor/mcp.json`（または プロジェクト直下の `.cursor/mcp.json`）に同じ JSON を追加します。
+
+### 💡 `@latest` 指定について
+
+上記の設定例ではいずれも `lit-forge-mcp@latest` を指定しています。これは `npx` のキャッシュ挙動により、バージョン指定なしの場合に古いキャッシュ版が使われ続けることがあるためです。`@latest` を指定すると、起動時に npm registry の最新タグを毎回確認して取得します（バージョン解決のオーバーヘッドはわずか）。
+
+すでに `lit-forge-mcp`（バージョン指定なし）で運用中の方は、新機能・バグ修正を取り込むために以下のいずれかをお試しください:
+
+1. **設定を `lit-forge-mcp@latest` に変更**（恒久対応、推奨）
+2. **npx キャッシュをクリア**: `npx clear-npx-cache` または手動で `~/.npm/_npx/` を削除
+3. **MCP クライアント（Claude Desktop など）を完全終了して再起動**
 
 ## ローカル開発
 
