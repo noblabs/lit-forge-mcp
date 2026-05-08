@@ -8,9 +8,9 @@
 
 Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI クライアントで動作します。
 
-> **v0.2.0 で「金融・個人投資家特化」にピボット**、**v0.3.0 で「毎朝の市況チェック」系 3 ツールを追加**、**v0.4.0 で銘柄数 9 → 28 に拡大 + 5 つの分析ツール追加**しました。
+> **v0.2.0 で「金融・個人投資家特化」にピボット**、**v0.3.0 で「毎朝の市況チェック」系 3 ツールを追加**、**v0.4.0 で銘柄数 9 → 28 に拡大 + 5 つの分析ツール追加**、**v0.6.0 で配当履歴・アナリストコンセンサス・ファンダメンタル指標を追加**しました。
 
-## 提供ツール（12 種）
+## 提供ツール（14 種）
 
 ### 個人資産形成プランナー（純関数、外部 API 不要）
 
@@ -27,7 +27,7 @@ Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI �
 |---|---|
 | `get_market_snapshot` | USD/JPY・EUR/JPY・GBP/JPY・AUD/JPY・EUR/USD・CHF/JPY・ドル指数・日経平均・TOPIX・NY ダウ・S&P 500・NASDAQ・VIX・NYSE FANG+・SOX・DAX・FTSE・上海総合・ハンセン・KOSPI・SENSEX・米10年/5年金利・金・原油・銅・ビットコイン・イーサリアム の主要 28 指標を一括取得 |
 | `get_economic_events_today` | 当日 or 今週の経済イベント（FOMC・日銀金融政策決定会合・米雇用統計・CPI・GDP・中国 PMI 等）を重要度付きで返す。半年分を手動キュレーション |
-| `get_quote` | 任意の Yahoo Finance ティッカー（株・為替・指数・コモディティ・暗号資産）の現在値・前日比を取得。例: `AAPL` / `^DJI` / `BTC-USD` |
+| `get_quote` | 任意の Yahoo Finance ティッカー（株・為替・指数・コモディティ・暗号資産）の現在値・前日比を取得。例: `AAPL` / `^DJI` / `BTC-USD`。`includeFundamentals: true` で PER / PBR / 配当利回り / ベータ / 時価総額も取得（v0.6.0） |
 
 ### 分析ツール（v0.4.0 新規）
 
@@ -39,7 +39,16 @@ Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI �
 | `get_market_sessions` | 主要 4 市場（東京・上海・ロンドン・NY）の現在の取引時間ステータス（open / pre-open / closed / **holiday**、v0.5.0 で祝日対応） |
 | `get_sector_heatmap` | 米株セクター ETF（SPDR、11 セクター）の前日比一覧 |
 
-> ⚠ **HTTP 通信について**: 市況・分析系ツールは **Yahoo Finance API（query1.finance.yahoo.com）** へ HTTPS リクエストを送信します。実行 PC のネットワークから外部に出る通信が発生する点にご留意ください。データは約 1 時間遅れの参考値で、**投資助言ではなく情報集約**として提供しています。
+### 個別株の深掘りツール（v0.6.0 新規）
+
+| ツール名 | 説明 |
+|---|---|
+| `get_dividend_history` | 個別株・ETF の過去 N 年の配当履歴と暦年合計を取得（`years`: 1/3/5/10、既定 5）。NISA 成長投資枠で配当銘柄を検討する一次情報として使用 |
+| `get_analyst_consensus` | 個別株のアナリスト推奨レーティング（強気買い〜強気売り）・目標株価（平均/高値/安値）・月別推奨内訳を取得。米国株は coverage が厚く、TSE 銘柄や ETF は欠損しやすい |
+
+> ⚠ **HTTP 通信について**: 市況・分析・個別株系ツールは **Yahoo Finance API（query1.finance.yahoo.com / query2.finance.yahoo.com）** へ HTTPS リクエストを送信します。実行 PC のネットワークから外部に出る通信が発生する点にご留意ください。データは約 1 時間遅れの参考値で、**投資助言ではなく情報集約**として提供しています。
+>
+> v0.6.0 で `get_quote includeFundamentals=true` / `get_dividend_history` / `get_analyst_consensus` の 3 ルートが Yahoo Finance v10 quoteSummary（crumb 認証あり）を経由するため、`yahoo-finance2` パッケージを依存に追加しました。
 
 Claude / GPT / Cursor との対話の中で「老後資金大丈夫？」「月いくら積み立てれば？」「今日の市況を要約して」「FOMC は今週いつ？」「マーケット温度計は？」「セクターでどこが強い？」を即座に試算・確認できます。
 
@@ -102,7 +111,7 @@ echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":
 {"jsonrpc":"2.0","id":2,"method":"tools/list"}' | node dist/index.js
 ```
 
-`tools/list` のレスポンスに 7 ツールが並べば成功です。
+`tools/list` のレスポンスに 14 ツールが並べば成功です。
 
 ## 使用例
 
@@ -119,6 +128,11 @@ Claude にこんな依頼ができます:
 - 「今週の経済イベントは？特に FOMC や日銀の予定を教えて」
 - 「米10年金利と日経平均の動きから、今のリスクオン度合いをコメントして」
 - 「BTC-USD の今の値は？」「ポンド円（GBPJPY=X）を教えて」
+
+**個別株の深掘り（v0.6.0）**
+- 「KO の過去 10 年の配当推移を見せて」「VYM の年次配当合計は？」
+- 「NVDA のアナリスト目標株価と推奨レーティングは？」
+- 「AAPL の PER / PBR / 配当利回り / ベータをまとめて」（`get_quote` で `includeFundamentals=true`）
 
 ## 投資判断の免責
 

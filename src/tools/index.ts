@@ -6,6 +6,7 @@
 // 初の HTTP fetch 導入（Yahoo Finance）— ローカル PC からインターネットに出ます。
 // v0.4.0 で 5 ツール追加（温度計・ランキング・イールドスプレッド・市場時間・セクターヒートマップ）。
 // 銘柄数 9 → 28 に拡大。
+// v0.6.0 で 2 ツール追加（配当履歴・アナリストコンセンサス）+ get_quote にファンダメンタル指標オプション。
 
 import { simulateNisaTool } from "./simulate-nisa.js";
 import { planRetirementTool } from "./plan-retirement.js";
@@ -19,6 +20,8 @@ import { getPerformanceRankingTool } from "./get-performance-ranking.js";
 import { getYieldSpreadTool } from "./get-yield-spread.js";
 import { getMarketSessionsTool } from "./get-market-sessions.js";
 import { getSectorHeatmapTool } from "./get-sector-heatmap.js";
+import { getDividendHistoryTool } from "./get-dividend-history.js";
+import { getAnalystConsensusTool } from "./get-analyst-consensus.js";
 
 export const tools = [
   simulateNisaTool,
@@ -34,4 +37,7 @@ export const tools = [
   getYieldSpreadTool,
   getMarketSessionsTool,
   getSectorHeatmapTool,
+  // v0.6.0 新規ツール
+  getDividendHistoryTool,
+  getAnalystConsensusTool,
 ];

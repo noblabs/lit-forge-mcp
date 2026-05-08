@@ -48,6 +48,53 @@ export type Quote = {
   performance?: PerformanceWindow;
   closes1y?: number[];
   isStale?: boolean;
+  // v0.6.0 で追加。get_quote の includeFundamentals=true 時のみ埋まる
+  fundamentals?: QuoteFundamentals;
+};
+
+// 株式のファンダメンタル指標（v0.6.0）。Yahoo Finance v10 quoteSummary 由来。
+// 個別株以外（指数・暗号資産・FX 等）では大半が undefined になる。
+export type QuoteFundamentals = {
+  trailingPE?: number;
+  forwardPE?: number;
+  priceToBook?: number;
+  // 配当利回り。0.0234 = 2.34%
+  dividendYield?: number;
+  // 配当性向。0.30 = 30%
+  payoutRatio?: number;
+  beta?: number;
+  marketCap?: number;
+  averageDailyVolume3M?: number;
+};
+
+// 配当履歴 1 件（v0.6.0）
+export type DividendRecord = {
+  // ISO 8601 日付（YYYY-MM-DD）
+  date: string;
+  amount: number;
+};
+
+// アナリストコンセンサス（v0.6.0）。Yahoo Finance v10 quoteSummary 由来。
+export type AnalystConsensus = {
+  // Yahoo の生の文字列。"strong_buy" / "buy" / "hold" / "sell" / "strong_sell" / "underperform" 等
+  recommendationKey?: string;
+  // recommendationKey を日本語化したラベル。例: "買い"、"中立"
+  recommendationLabel?: string;
+  // 1.0 (Strong Buy) ~ 5.0 (Strong Sell) のアナリスト平均
+  recommendationMean?: number;
+  targetMeanPrice?: number;
+  targetHighPrice?: number;
+  targetLowPrice?: number;
+  numberOfAnalystOpinions?: number;
+  // 直近 4 ヶ月分の月別推奨内訳（Yahoo の period: "0m", "-1m", "-2m", "-3m"）
+  byMonth?: Array<{
+    period: string;
+    strongBuy: number;
+    buy: number;
+    hold: number;
+    sell: number;
+    strongSell: number;
+  }>;
 };
 
 export type QuoteResult = Quote | { error: string };

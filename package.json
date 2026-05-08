@@ -1,8 +1,8 @@
 {
   "name": "lit-forge-mcp",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "mcpName": "io.github.noblabs/lit-forge-mcp",
-  "description": "MCP server for personal asset planning + daily market check: NISA / iDeCo simulation, retirement planning, market snapshot (USD/JPY, Nikkei, S&P 500, etc.), economic event calendar.",
+  "description": "MCP server for personal asset planning + daily market check: NISA / iDeCo simulation, retirement planning, market snapshot (USD/JPY, Nikkei, S&P 500, etc.), dividend history, analyst consensus, economic events.",
   "type": "module",
   "license": "MIT",
   "homepage": "https://github.com/noblabs/lit-forge-mcp",
@@ -27,6 +27,8 @@
     "stock-quote",
     "forex",
     "economic-calendar",
+    "dividend",
+    "analyst",
     "japan"
   ],
   "bin": {
@@ -47,6 +49,7 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",
+    "yahoo-finance2": "^3.14.0",
     "zod": "^3.25.0"
   },
   "devDependencies": {
