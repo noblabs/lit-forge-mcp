@@ -1,0 +1,47 @@
+{
+  "source": "https://www.whitehouse.gov/wp-content/uploads/2025/09/pfei_schedule_release_dates_cy2026.pdf",
+  "sourceCalendar": "https://www.bls.gov/schedule/news_release/empsit.htm",
+  "lastSyncedAt": "2026-05-12",
+  "scopeStart": "2026-05-01",
+  "scopeEnd": "2026-10-31",
+  "comment": "米 雇用統計（Employment Situation）2026 年公式リリース日程。PFEI 2026 年版 PDF から手転記。原則第 1 金曜だが祝日等で前後する月あり（例: 7/4 独立記念日のため 6 月分は 7/2 木曜に前倒し）。時刻は全て 08:30 ET = 21:30 JST。",
+  "events": [
+    {
+      "publishDate": "2026-05-08",
+      "publishTime": "21:30",
+      "label": "米 雇用統計（4 月）",
+      "referenceMonth": "2026-04"
+    },
+    {
+      "publishDate": "2026-06-05",
+      "publishTime": "21:30",
+      "label": "米 雇用統計（5 月）",
+      "referenceMonth": "2026-05"
+    },
+    {
+      "publishDate": "2026-07-02",
+      "publishTime": "21:30",
+      "label": "米 雇用統計（6 月）",
+      "referenceMonth": "2026-06",
+      "comment": "独立記念日（7/4 土曜・7/3 振替休場）のため通常の金曜から木曜へ前倒し"
+    },
+    {
+      "publishDate": "2026-08-07",
+      "publishTime": "21:30",
+      "label": "米 雇用統計（7 月）",
+      "referenceMonth": "2026-07"
+    },
+    {
+      "publishDate": "2026-09-04",
+      "publishTime": "21:30",
+      "label": "米 雇用統計（8 月）",
+      "referenceMonth": "2026-08"
+    },
+    {
+      "publishDate": "2026-10-02",
+      "publishTime": "21:30",
+      "label": "米 雇用統計（9 月）",
+      "referenceMonth": "2026-09"
+    }
+  ]
+}

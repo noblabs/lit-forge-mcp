@@ -1,0 +1,46 @@
+{
+  "source": "https://www.whitehouse.gov/wp-content/uploads/2025/09/pfei_schedule_release_dates_cy2026.pdf",
+  "sourceCalendar": "https://www.bls.gov/schedule/news_release/ppi.htm",
+  "lastSyncedAt": "2026-05-12",
+  "scopeStart": "2026-05-01",
+  "scopeEnd": "2026-10-31",
+  "comment": "米 PPI 2026 年公式リリース日程。White House OMB/OIRA 発行 PFEI 2026 年版 PDF から手転記。時刻は全て 08:30 ET = 21:30 JST（DST 期間）。",
+  "events": [
+    {
+      "publishDate": "2026-05-13",
+      "publishTime": "21:30",
+      "label": "米 PPI（4 月）",
+      "referenceMonth": "2026-04"
+    },
+    {
+      "publishDate": "2026-06-11",
+      "publishTime": "21:30",
+      "label": "米 PPI（5 月）",
+      "referenceMonth": "2026-05"
+    },
+    {
+      "publishDate": "2026-07-15",
+      "publishTime": "21:30",
+      "label": "米 PPI（6 月）",
+      "referenceMonth": "2026-06"
+    },
+    {
+      "publishDate": "2026-08-13",
+      "publishTime": "21:30",
+      "label": "米 PPI（7 月）",
+      "referenceMonth": "2026-07"
+    },
+    {
+      "publishDate": "2026-09-10",
+      "publishTime": "21:30",
+      "label": "米 PPI（8 月）",
+      "referenceMonth": "2026-08"
+    },
+    {
+      "publishDate": "2026-10-15",
+      "publishTime": "21:30",
+      "label": "米 PPI（9 月）",
+      "referenceMonth": "2026-09"
+    }
+  ]
+}

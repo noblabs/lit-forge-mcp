@@ -1,0 +1,46 @@
+{
+  "source": "https://www.whitehouse.gov/wp-content/uploads/2025/09/pfei_schedule_release_dates_cy2026.pdf",
+  "sourceCalendar": "https://www.bls.gov/schedule/news_release/cpi.htm",
+  "lastSyncedAt": "2026-05-12",
+  "scopeStart": "2026-05-01",
+  "scopeEnd": "2026-10-31",
+  "comment": "米 CPI 2026 年公式リリース日程。White House OMB/OIRA 発行 PFEI（Principal Federal Economic Indicators）2026 年版 PDF から手転記。時刻は全て 08:30 ET = 21:30 JST（DST 期間）。label は ECONOMIC_EVENTS の name と完全一致させる（verify スクリプトの突合キー）。",
+  "events": [
+    {
+      "publishDate": "2026-05-12",
+      "publishTime": "21:30",
+      "label": "米 CPI（4 月）",
+      "referenceMonth": "2026-04"
+    },
+    {
+      "publishDate": "2026-06-10",
+      "publishTime": "21:30",
+      "label": "米 CPI（5 月）",
+      "referenceMonth": "2026-05"
+    },
+    {
+      "publishDate": "2026-07-14",
+      "publishTime": "21:30",
+      "label": "米 CPI（6 月）",
+      "referenceMonth": "2026-06"
+    },
+    {
+      "publishDate": "2026-08-12",
+      "publishTime": "21:30",
+      "label": "米 CPI（7 月）",
+      "referenceMonth": "2026-07"
+    },
+    {
+      "publishDate": "2026-09-11",
+      "publishTime": "21:30",
+      "label": "米 CPI（8 月）",
+      "referenceMonth": "2026-08"
+    },
+    {
+      "publishDate": "2026-10-14",
+      "publishTime": "21:30",
+      "label": "米 CPI（9 月）",
+      "referenceMonth": "2026-09"
+    }
+  ]
+}

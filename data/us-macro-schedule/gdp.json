@@ -1,0 +1,24 @@
+{
+  "source": "https://www.whitehouse.gov/wp-content/uploads/2025/09/pfei_schedule_release_dates_cy2026.pdf",
+  "sourceCalendar": "https://www.bea.gov/news/schedule",
+  "lastSyncedAt": "2026-05-12",
+  "scopeStart": "2026-05-01",
+  "scopeEnd": "2026-10-31",
+  "comment": "米 GDP（BEA 発表）2026 年公式リリース日程。PFEI 2026 年版 PDF + BEA 公式サイト両方で照合済み。本 JSON は『速報値 (Advance Estimate)』のみ対象（TS 側も速報値のみ収録）。時刻は全て 08:30 ET = 21:30 JST。",
+  "events": [
+    {
+      "publishDate": "2026-07-30",
+      "publishTime": "21:30",
+      "label": "米 GDP 速報値（4-6 月期）",
+      "estimateType": "advance",
+      "referenceQuarter": "2026Q2"
+    },
+    {
+      "publishDate": "2026-10-29",
+      "publishTime": "21:30",
+      "label": "米 GDP 速報値（7-9 月期）",
+      "estimateType": "advance",
+      "referenceQuarter": "2026Q3"
+    }
+  ]
+}

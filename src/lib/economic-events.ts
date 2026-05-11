@@ -10,7 +10,7 @@
 
 import type { EconomicEvent, EventCategory } from "./market-types.js";
 
-export const LAST_UPDATED = "2026-05-11";
+export const LAST_UPDATED = "2026-05-12";
 
 export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   // ============ 2026 年 5 月 ============
@@ -20,12 +20,12 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-05-05", time: "23:00", country: "US", name: "米 ISM 非製造業 PMI（4 月）", importance: 2 },
   { date: "2026-05-12", time: "08:50", country: "JP", name: "日銀 主な意見（4 月会合分）", importance: 2, note: "4 月 27-28 日会合分。公表は会合の約 2 週間後" },
   { date: "2026-05-11", endDate: "2026-05-13", country: "US", name: "ベッセント米財務長官 訪日（〜5/13）", importance: 2, category: "geopolitical", note: "為替・関税協議の文脈。日米財務対話の有無に注目" },
-  { date: "2026-05-13", time: "21:30", country: "US", name: "米 CPI（4 月）", importance: 3, note: "総合・コア前年比" },
-  { date: "2026-05-14", time: "21:30", country: "US", name: "米 PPI（4 月）", importance: 2 },
-  { date: "2026-05-15", time: "21:30", country: "US", name: "米 小売売上高（4 月）", importance: 2 },
+  { date: "2026-05-12", time: "21:30", country: "US", name: "米 CPI（4 月）", importance: 3, note: "総合・コア前年比" },
+  { date: "2026-05-13", time: "21:30", country: "US", name: "米 PPI（4 月）", importance: 2 },
+  { date: "2026-05-14", time: "21:30", country: "US", name: "米 小売売上高（4 月）", importance: 2 },
   { date: "2026-05-15", country: "JP", name: "日 GDP 一次速報（1-3 月期）", importance: 3 },
   { date: "2026-05-22", time: "08:30", country: "JP", name: "日 CPI（4 月）", importance: 2 },
-  { date: "2026-05-29", time: "21:30", country: "US", name: "米 PCE 価格指数（4 月）", importance: 3, note: "FRB が重視するインフレ指標" },
+  { date: "2026-05-28", time: "21:30", country: "US", name: "米 PCE 価格指数（4 月）", importance: 3, note: "FRB が重視するインフレ指標" },
 
   // ============ 2026 年 6 月 ============
   { date: "2026-06-01", time: "10:30", country: "CN", name: "中国 製造業 PMI（5 月）", importance: 2 },
@@ -40,7 +40,7 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-06-16", country: "US", name: "FOMC（1 日目）", importance: 3 },
   { date: "2026-06-17", time: "27:00", country: "US", name: "FOMC 結果発表 + 経済予測", importance: 3, note: "ドットチャート更新月" },
   { date: "2026-06-17", time: "27:30", country: "US", name: "FRB 議長記者会見", importance: 3 },
-  { date: "2026-06-26", time: "21:30", country: "US", name: "米 PCE 価格指数（5 月）", importance: 3 },
+  { date: "2026-06-25", time: "21:30", country: "US", name: "米 PCE 価格指数（5 月）", importance: 3 },
 
   // ============ 2026 年 7 月 ============
   { date: "2026-07-01", time: "10:30", country: "CN", name: "中国 製造業 PMI（6 月）", importance: 2 },
@@ -50,16 +50,16 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-07-03", country: "US", name: "米 独立記念日 振替休場（7/4 土曜のため 7/3 金曜が休場）", importance: 1 },
   { date: "2026-07-02", time: "21:30", country: "US", name: "米 雇用統計（6 月）", importance: 3, note: "独立記念日 7/4 のため通常の金曜から木曜へ前倒し発表" },
   { date: "2026-07-10", country: "JP", name: "日 SQ", importance: 1 },
-  { date: "2026-07-15", time: "21:30", country: "US", name: "米 CPI（6 月）", importance: 3 },
+  { date: "2026-07-14", time: "21:30", country: "US", name: "米 CPI（6 月）", importance: 3 },
   { date: "2026-07-15", time: "11:00", country: "CN", name: "中国 GDP（4-6 月期）", importance: 3 },
-  { date: "2026-07-16", time: "21:30", country: "US", name: "米 PPI（6 月）", importance: 2 },
-  { date: "2026-07-17", time: "21:30", country: "US", name: "米 小売売上高（6 月）", importance: 2 },
+  { date: "2026-07-15", time: "21:30", country: "US", name: "米 PPI（6 月）", importance: 2 },
+  { date: "2026-07-16", time: "21:30", country: "US", name: "米 小売売上高（6 月）", importance: 2 },
   { date: "2026-07-30", country: "JP", name: "日銀 金融政策決定会合（1 日目）", importance: 3 },
   { date: "2026-07-31", country: "JP", name: "日銀 金融政策決定会合（結果 + 展望レポート）", importance: 3, note: "総裁会見あり" },
   { date: "2026-07-28", country: "US", name: "FOMC（1 日目）", importance: 3 },
   { date: "2026-07-29", time: "27:00", country: "US", name: "FOMC 結果発表", importance: 3 },
   { date: "2026-07-30", time: "21:30", country: "US", name: "米 GDP 速報値（4-6 月期）", importance: 3 },
-  { date: "2026-07-31", time: "21:30", country: "US", name: "米 PCE 価格指数（6 月）", importance: 3 },
+  { date: "2026-07-30", time: "21:30", country: "US", name: "米 PCE 価格指数（6 月）", importance: 3 },
 
   // ============ 2026 年 8 月 ============
   { date: "2026-07-31", time: "10:30", country: "CN", name: "中国 製造業 PMI（7 月）", importance: 2 },
@@ -73,13 +73,14 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-08-17", time: "08:50", country: "JP", name: "日 GDP 一次速報（4-6 月期）", importance: 3 },
   { date: "2026-08-21", time: "08:30", country: "JP", name: "日 CPI（7 月）", importance: 2 },
   { date: "2026-08-27", country: "US", name: "ジャクソンホール会議（〜29）", importance: 3, note: "FRB 議長講演に注目" },
-  { date: "2026-08-28", time: "21:30", country: "US", name: "米 PCE 価格指数（7 月）", importance: 3 },
+  { date: "2026-08-26", time: "21:30", country: "US", name: "米 PCE 価格指数（7 月）", importance: 3 },
 
   // ============ 2026 年 9 月 ============
   { date: "2026-09-01", time: "10:30", country: "CN", name: "中国 製造業 PMI（8 月）", importance: 2 },
   { date: "2026-09-01", time: "23:00", country: "US", name: "米 ISM 製造業 PMI（8 月）", importance: 3 },
   { date: "2026-09-03", time: "23:00", country: "US", name: "米 ISM 非製造業 PMI（8 月）", importance: 2 },
   { date: "2026-09-04", time: "21:30", country: "US", name: "米 雇用統計（8 月）", importance: 3 },
+  { date: "2026-09-10", time: "21:30", country: "US", name: "米 PPI（8 月）", importance: 2 },
   { date: "2026-09-11", time: "21:30", country: "US", name: "米 CPI（8 月）", importance: 3 },
   { date: "2026-09-11", country: "JP", name: "日 SQ", importance: 1 },
   { date: "2026-09-15", country: "US", name: "FOMC（1 日目）", importance: 3 },
@@ -87,7 +88,7 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-09-17", country: "JP", name: "日銀 金融政策決定会合（1 日目）", importance: 3 },
   { date: "2026-09-18", country: "JP", name: "日銀 金融政策決定会合（結果発表）", importance: 3, note: "総裁会見あり" },
   { date: "2026-09-25", time: "08:30", country: "JP", name: "日 CPI（8 月）", importance: 2 },
-  { date: "2026-09-25", time: "21:30", country: "US", name: "米 PCE 価格指数（8 月）", importance: 3 },
+  { date: "2026-09-30", time: "21:30", country: "US", name: "米 PCE 価格指数（8 月）", importance: 3 },
 
   // ============ 2026 年 10 月 ============
   { date: "2026-10-01", time: "08:50", country: "JP", name: "日銀短観（7-9 月期）", importance: 3 },
@@ -96,15 +97,15 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-10-02", time: "23:00", country: "US", name: "米 ISM 非製造業 PMI（9 月）", importance: 2 },
   { date: "2026-10-02", time: "21:30", country: "US", name: "米 雇用統計（9 月）", importance: 3 },
   { date: "2026-10-09", country: "JP", name: "日 SQ", importance: 1 },
-  { date: "2026-10-13", time: "21:30", country: "US", name: "米 CPI（9 月）", importance: 3 },
-  { date: "2026-10-14", time: "21:30", country: "US", name: "米 PPI（9 月）", importance: 2 },
+  { date: "2026-10-14", time: "21:30", country: "US", name: "米 CPI（9 月）", importance: 3 },
+  { date: "2026-10-15", time: "21:30", country: "US", name: "米 PPI（9 月）", importance: 2 },
   { date: "2026-10-19", time: "11:00", country: "CN", name: "中国 GDP（7-9 月期）", importance: 3 },
   { date: "2026-10-27", country: "US", name: "FOMC（1 日目）", importance: 3 },
   { date: "2026-10-28", time: "27:00", country: "US", name: "FOMC 結果発表", importance: 3 },
   { date: "2026-10-29", country: "JP", name: "日銀 金融政策決定会合（1 日目）", importance: 3 },
   { date: "2026-10-30", country: "JP", name: "日銀 金融政策決定会合（結果 + 展望レポート）", importance: 3, note: "総裁会見あり" },
-  { date: "2026-10-30", time: "21:30", country: "US", name: "米 GDP 速報値（7-9 月期）", importance: 3 },
-  { date: "2026-10-30", time: "21:30", country: "US", name: "米 PCE 価格指数（9 月）", importance: 3 },
+  { date: "2026-10-29", time: "21:30", country: "US", name: "米 GDP 速報値（7-9 月期）", importance: 3 },
+  { date: "2026-10-29", time: "21:30", country: "US", name: "米 PCE 価格指数（9 月）", importance: 3 },
 ];
 
 // JST の年月日を yyyy-mm-dd 形式で返す（leaderboard/keys.ts と同一ロジック）。

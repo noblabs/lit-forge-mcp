@@ -70,17 +70,20 @@ describe("ECONOMIC_EVENTS data integrity", () => {
     expect(offenders).toEqual([]);
   });
 
-  it("米 PCE 価格指数は金曜でなければならない", () => {
+  it("米 PCE 価格指数は平日（月-金）に登録される", () => {
+    // BEA は月末近辺の平日（水・木・金）に発表する。曜日固定ではない。
+    // 厳密な日付検証は describe("米マクロ指標イベントは公式日程 JSON と一致する") 側で実施。
     const pce = ECONOMIC_EVENTS.filter(
       (e) => e.country === "US" && e.name.includes("PCE"),
     );
     expect(pce.length).toBeGreaterThan(0);
-    const offenders = pce.filter((e) => jstDayOfWeek(e.date) !== 5);
+    const offenders = pce.filter((e) => {
+      const dow = jstDayOfWeek(e.date);
+      return dow === 0 || dow === 6; // 土日のみ NG
+    });
     if (offenders.length > 0) {
       const detail = offenders.map((e) => `${e.date} ${e.name}`);
-      throw new Error(
-        `米 PCE が金曜以外に登録されています:\n${detail.join("\n")}`,
-      );
+      throw new Error(`米 PCE が土日に登録されています:\n${detail.join("\n")}`);
     }
     expect(offenders).toEqual([]);
   });
@@ -120,8 +123,8 @@ describe("ECONOMIC_EVENTS data integrity", () => {
   });
 
   it("getEventsForDate は重要度降順でソートされる", () => {
-    // 5/15 には ★3 (日 GDP) と ★2 (米 小売) の 2 件がある
-    const events = getEventsForDate("2026-05-15");
+    // 7/1 には ★3 (米 ISM 製造業, 日銀短観) と ★2 (中国 PMI) の 3 件がある
+    const events = getEventsForDate("2026-07-01");
     expect(events.length).toBeGreaterThanOrEqual(2);
     for (let i = 1; i < events.length; i++) {
       expect(events[i - 1].importance).toBeGreaterThanOrEqual(
@@ -259,6 +262,67 @@ describe("中銀イベントは公式日程 JSON と一致する", () => {
       );
       throw new Error(
         `公式日程 JSON に存在しない TS 中銀エントリが ${missing.length} 件あります（公式と種別/日付が一致しないか、JSON 側が未更新）:\n${detail.join("\n")}`,
+      );
+    }
+    expect(missing).toEqual([]);
+  });
+});
+
+describe("米マクロ指標イベントは公式日程 JSON と一致する", () => {
+  // 2026-05-12 に発生した「米 CPI（4 月）5/13 (実際は 5/12)」の再発防止。
+  // PPI/PCE/小売売上高/GDP/雇用統計も同様に系統的な 1 日ズレが連鎖していたため
+  // PFEI（Principal Federal Economic Indicators）2026 年版 PDF を一次ソースとして
+  // data/us-macro-schedule/*.json に手転記し、TS ⊆ JSON で照合する。
+  // ※ ISM 製造業/非製造業 PMI は ismworld.org が認証ウォール内のため対象外。
+  const US_MACRO_KEYWORDS = [
+    "米 CPI",
+    "米 PPI",
+    "米 雇用統計",
+    "米 小売売上高",
+    "米 PCE",
+    "米 GDP 速報",
+  ];
+  const US_MACRO_SOURCES = [
+    "data/us-macro-schedule/cpi.json",
+    "data/us-macro-schedule/ppi.json",
+    "data/us-macro-schedule/employment.json",
+    "data/us-macro-schedule/retail-sales.json",
+    "data/us-macro-schedule/pce.json",
+    "data/us-macro-schedule/gdp.json",
+  ];
+
+  function loadUsMacroKeys(): Set<string> {
+    const keys = new Set<string>();
+    for (const relPath of US_MACRO_SOURCES) {
+      const fullPath = join(REPO_ROOT, relPath);
+      const data = JSON.parse(readFileSync(fullPath, "utf-8")) as {
+        events: Array<{ publishDate: string; publishTime?: string; label: string }>;
+      };
+      for (const ev of data.events) {
+        keys.add(`${ev.publishDate}|${ev.publishTime ?? ""}|${ev.label}`);
+      }
+    }
+    return keys;
+  }
+
+  it("TS 米マクロ指標エントリは全て data/us-macro-schedule/*.json に存在する", () => {
+    const officialKeys = loadUsMacroKeys();
+    const tsTargets = ECONOMIC_EVENTS.filter((e) =>
+      US_MACRO_KEYWORDS.some((kw) => e.name.includes(kw)),
+    );
+    expect(tsTargets.length).toBeGreaterThan(0);
+
+    const missing = tsTargets.filter((e) => {
+      const key = `${e.date}|${e.time ?? ""}|${e.name}`;
+      return !officialKeys.has(key);
+    });
+
+    if (missing.length > 0) {
+      const detail = missing.map(
+        (e) => `${e.date} ${e.time ?? "(終日)"} ★${e.importance} ${e.name}`,
+      );
+      throw new Error(
+        `公式日程 JSON に存在しない TS 米マクロ指標エントリが ${missing.length} 件あります（PFEI 公式と日付が一致しないか、JSON 側が未更新）:\n${detail.join("\n")}`,
       );
     }
     expect(missing).toEqual([]);
