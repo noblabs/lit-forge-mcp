@@ -1,0 +1,121 @@
+{
+  "source": "https://www.boj.or.jp/mopo/mpmsche_minu/m_ref/mref250731a.pdf",
+  "sourceCalendar": "https://www.boj.or.jp/about/calendar/index.htm",
+  "lastSyncedAt": "2026-05-11",
+  "scopeStart": "2026-05-11",
+  "scopeEnd": "2026-10-31",
+  "comment": "日銀 2026 年の金融政策決定会合等の日程を BOJ 公式 PDF から手転記。type は meeting=会合 / opinions=主な意見 / minutes=議事要旨。label は ECONOMIC_EVENTS の name と完全一致させる（verify スクリプトの突合キー）。",
+  "events": [
+    {
+      "publishDate": "2026-05-12",
+      "publishTime": "08:50",
+      "type": "opinions",
+      "label": "日銀 主な意見（4 月会合分）",
+      "relatedMeeting": "2026-04-27/28"
+    },
+    {
+      "publishDate": "2026-06-15",
+      "type": "meeting",
+      "label": "日銀 金融政策決定会合（1 日目）",
+      "relatedMeeting": "2026-06-15/16"
+    },
+    {
+      "publishDate": "2026-06-16",
+      "type": "meeting",
+      "label": "日銀 金融政策決定会合（結果発表）",
+      "relatedMeeting": "2026-06-15/16"
+    },
+    {
+      "publishDate": "2026-06-19",
+      "publishTime": "08:50",
+      "type": "minutes",
+      "label": "日銀 議事要旨（4 月会合分）",
+      "relatedMeeting": "2026-04-27/28"
+    },
+    {
+      "publishDate": "2026-06-24",
+      "publishTime": "08:50",
+      "type": "opinions",
+      "label": "日銀 主な意見（6 月会合分）",
+      "relatedMeeting": "2026-06-15/16"
+    },
+    {
+      "publishDate": "2026-07-01",
+      "publishTime": "08:50",
+      "type": "tankan",
+      "label": "日銀短観（4-6 月期）",
+      "comment": "短観は会合関連ではなく短期経済観測調査"
+    },
+    {
+      "publishDate": "2026-07-30",
+      "type": "meeting",
+      "label": "日銀 金融政策決定会合（1 日目）",
+      "relatedMeeting": "2026-07-30/31"
+    },
+    {
+      "publishDate": "2026-07-31",
+      "type": "meeting",
+      "label": "日銀 金融政策決定会合（結果 + 展望レポート）",
+      "relatedMeeting": "2026-07-30/31"
+    },
+    {
+      "publishDate": "2026-08-05",
+      "publishTime": "08:50",
+      "type": "minutes",
+      "label": "日銀 議事要旨（6 月会合分）",
+      "relatedMeeting": "2026-06-15/16"
+    },
+    {
+      "publishDate": "2026-08-10",
+      "publishTime": "08:50",
+      "type": "opinions",
+      "label": "日銀 主な意見（7 月会合分）",
+      "relatedMeeting": "2026-07-30/31"
+    },
+    {
+      "publishDate": "2026-09-17",
+      "type": "meeting",
+      "label": "日銀 金融政策決定会合（1 日目）",
+      "relatedMeeting": "2026-09-17/18"
+    },
+    {
+      "publishDate": "2026-09-18",
+      "type": "meeting",
+      "label": "日銀 金融政策決定会合（結果発表）",
+      "relatedMeeting": "2026-09-17/18"
+    },
+    {
+      "publishDate": "2026-09-28",
+      "publishTime": "08:50",
+      "type": "minutes",
+      "label": "日銀 議事要旨（7 月会合分）",
+      "relatedMeeting": "2026-07-30/31"
+    },
+    {
+      "publishDate": "2026-10-01",
+      "publishTime": "08:50",
+      "type": "tankan",
+      "label": "日銀短観（7-9 月期）",
+      "comment": "短観は会合関連ではなく短期経済観測調査"
+    },
+    {
+      "publishDate": "2026-10-01",
+      "publishTime": "08:50",
+      "type": "opinions",
+      "label": "日銀 主な意見（9 月会合分）",
+      "relatedMeeting": "2026-09-17/18"
+    },
+    {
+      "publishDate": "2026-10-29",
+      "type": "meeting",
+      "label": "日銀 金融政策決定会合（1 日目）",
+      "relatedMeeting": "2026-10-29/30"
+    },
+    {
+      "publishDate": "2026-10-30",
+      "type": "meeting",
+      "label": "日銀 金融政策決定会合（結果 + 展望レポート）",
+      "relatedMeeting": "2026-10-29/30"
+    }
+  ]
+}

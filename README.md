@@ -8,7 +8,7 @@
 
 Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI クライアントで動作します。
 
-> **v0.2.0 で「金融・個人投資家特化」にピボット**、**v0.3.0 で「毎朝の市況チェック」系 3 ツールを追加**、**v0.4.0 で銘柄数 9 → 28 に拡大 + 5 つの分析ツール追加**、**v0.6.0 で配当履歴・アナリストコンセンサス・ファンダメンタル指標を追加**しました。
+> **v0.2.0 で「金融・個人投資家特化」にピボット**、**v0.3.0 で「毎朝の市況チェック」系 3 ツールを追加**、**v0.4.0 で銘柄数 9 → 28 に拡大 + 5 つの分析ツール追加**、**v0.6.0 で配当履歴・アナリストコンセンサス・ファンダメンタル指標を追加**、**v0.7.0 で経済イベントに地政学カテゴリ（要人訪問・首脳会談）と複数日イベント（endDate）対応を追加**しました。
 
 ## 提供ツール（14 種）
 
@@ -26,7 +26,7 @@ Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI �
 | ツール名 | 説明 |
 |---|---|
 | `get_market_snapshot` | USD/JPY・EUR/JPY・GBP/JPY・AUD/JPY・EUR/USD・CHF/JPY・ドル指数・日経平均・TOPIX・NY ダウ・S&P 500・NASDAQ・VIX・NYSE FANG+・SOX・DAX・FTSE・上海総合・ハンセン・KOSPI・SENSEX・米10年/5年金利・金・原油・銅・ビットコイン・イーサリアム の主要 28 指標を一括取得 |
-| `get_economic_events_today` | 当日 or 今週の経済イベント（FOMC・日銀金融政策決定会合・米雇用統計・CPI・GDP・中国 PMI 等）を重要度付きで返す。半年分を手動キュレーション |
+| `get_economic_events_today` | 当日 or 今週の経済イベント（FOMC・日銀金融政策決定会合・米雇用統計・CPI・GDP・中国 PMI 等のマクロ指標、要人訪問・首脳会談などの地政学日程）を重要度付きで返す。`category` で `macro` / `geopolitical` / `policy` に絞り込み可能。期間イベント（訪日・サミット等）は `endDate` で複数日対応。半年分を手動キュレーション |
 | `get_quote` | 任意の Yahoo Finance ティッカー（株・為替・指数・コモディティ・暗号資産）の現在値・前日比を取得。例: `AAPL` / `^DJI` / `BTC-USD`。`includeFundamentals: true` で PER / PBR / 配当利回り / ベータ / 時価総額も取得（v0.6.0） |
 
 ### 分析ツール（v0.4.0 新規）

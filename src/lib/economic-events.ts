@@ -1,14 +1,16 @@
 // 主要経済イベントカレンダー（2026 年 5 月〜10 月）。
-// FOMC・日銀会合・米雇用統計・CPI・GDP・中国 PMI など、相場に影響大きいイベントのみ収録。
+// FOMC・日銀会合・米雇用統計・CPI・GDP・中国 PMI などのマクロ指標に加え、
+// v0.7.0 から要人訪問・首脳会談などの地政学イベント（category: "geopolitical"）も収録。
 // 第三者 API に依存しない自前データ → AdSense YMYL 配慮 + スクレイピング先 DOM 変更で死なない。
 // 半年に 1 回 PR で追加運用、`scripts/check-events-freshness.mjs` で 90 日前から CI 警告。
 //
 // 重要度: 1=★（参考）/ 2=★★（重要）/ 3=★★★（必読）。
 // 日付は JST、時刻が示す場合は HH:MM JST。終日イベント（FOMC 結果等）は time 省略。
+// 複数日にまたがるイベント（訪日・サミット等）は endDate を付与。
 
-import type { EconomicEvent } from "./market-types.js";
+import type { EconomicEvent, EventCategory } from "./market-types.js";
 
-export const LAST_UPDATED = "2026-05-08";
+export const LAST_UPDATED = "2026-05-11";
 
 export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   // ============ 2026 年 5 月 ============
@@ -16,7 +18,8 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-05-01", time: "23:00", country: "US", name: "米 ISM 製造業 PMI（4 月）", importance: 3 },
   { date: "2026-05-08", time: "21:30", country: "US", name: "米 雇用統計（4 月）", importance: 3, note: "非農業部門雇用者数・失業率・平均時給" },
   { date: "2026-05-05", time: "23:00", country: "US", name: "米 ISM 非製造業 PMI（4 月）", importance: 2 },
-  { date: "2026-05-11", time: "08:50", country: "JP", name: "日銀 金融政策決定会合 議事要旨", importance: 2 },
+  { date: "2026-05-12", time: "08:50", country: "JP", name: "日銀 主な意見（4 月会合分）", importance: 2, note: "4 月 27-28 日会合分。公表は会合の約 2 週間後" },
+  { date: "2026-05-11", endDate: "2026-05-13", country: "US", name: "ベッセント米財務長官 訪日（〜5/13）", importance: 2, category: "geopolitical", note: "為替・関税協議の文脈。日米財務対話の有無に注目" },
   { date: "2026-05-13", time: "21:30", country: "US", name: "米 CPI（4 月）", importance: 3, note: "総合・コア前年比" },
   { date: "2026-05-14", time: "21:30", country: "US", name: "米 PPI（4 月）", importance: 2 },
   { date: "2026-05-15", time: "21:30", country: "US", name: "米 小売売上高（4 月）", importance: 2 },
@@ -115,12 +118,16 @@ export function jstDateKey(now: Date = new Date()): string {
 }
 
 // JST 当日のイベントを返す（重要度降順）。
+// 期間イベント（endDate あり）は date <= 当日 <= endDate でヒットする。
 export function getEventsForDate(
   date: string,
   events: readonly EconomicEvent[] = ECONOMIC_EVENTS,
 ): EconomicEvent[] {
   return events
-    .filter((e) => e.date === date)
+    .filter((e) => {
+      const end = e.endDate ?? e.date;
+      return e.date <= date && date <= end;
+    })
     .sort(
       (a, b) =>
         b.importance - a.importance ||
@@ -129,6 +136,7 @@ export function getEventsForDate(
 }
 
 // 当日を含む 7 日間（今日〜+6 日）のイベントを返す。
+// 期間イベントは [event.date, event.endDate] と週レンジが 1 日でも重なれば含める。
 export function getEventsForWeek(
   fromDate: string,
   events: readonly EconomicEvent[] = ECONOMIC_EVENTS,
@@ -140,9 +148,14 @@ export function getEventsForWeek(
     d.setDate(d.getDate() + i);
     dates.push(jstDateKey(d));
   }
-  const set = new Set(dates);
+  const weekStart = dates[0];
+  const weekEnd = dates[dates.length - 1];
   return events
-    .filter((e) => set.has(e.date))
+    .filter((e) => {
+      const end = e.endDate ?? e.date;
+      // 区間 [e.date, end] と [weekStart, weekEnd] の重なり判定
+      return e.date <= weekEnd && end >= weekStart;
+    })
     .sort(
       (a, b) =>
         a.date.localeCompare(b.date) ||
@@ -157,6 +170,17 @@ export function filterByImportance(
   minImportance: 1 | 2 | 3,
 ): EconomicEvent[] {
   return events.filter((e) => e.importance >= minImportance);
+}
+
+// カテゴリフィルタ。category 未指定エントリは "macro" 扱いで判定する。
+// categories 未指定 or 空配列の場合はフィルタしない（全件返す）。
+export function filterByCategory(
+  events: readonly EconomicEvent[],
+  categories: readonly EventCategory[] | undefined,
+): EconomicEvent[] {
+  if (!categories || categories.length === 0) return events.slice();
+  const set = new Set(categories);
+  return events.filter((e) => set.has(e.category ?? "macro"));
 }
 
 export const COUNTRY_LABEL: Record<EconomicEvent["country"], string> = {

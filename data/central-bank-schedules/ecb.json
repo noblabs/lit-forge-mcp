@@ -1,0 +1,8 @@
+{
+  "source": "https://www.ecb.europa.eu/press/calendars/mgcgc/html/index.en.html",
+  "lastSyncedAt": "2026-05-11",
+  "scopeStart": "2026-05-11",
+  "scopeEnd": "2026-10-31",
+  "comment": "ECB Governing Council 金融政策会合 + 総裁会見を公式 calendar から手転記。現状 ECONOMIC_EVENTS には ECB エントリは未登録のため events は空。半年に 1 回の更新時に Web で ECB Governing Council monetary policy meeting calendar を参照し追加すること。",
+  "events": []
+}

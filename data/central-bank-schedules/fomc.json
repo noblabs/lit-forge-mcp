@@ -1,0 +1,70 @@
+{
+  "source": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+  "lastSyncedAt": "2026-05-11",
+  "scopeStart": "2026-05-11",
+  "scopeEnd": "2026-10-31",
+  "comment": "FOMC 2026 年の会合日程を Fed 公式 calendar から手転記。time の '27:00' は JST 翌日 03:00 表記（米時間水曜午後）。label は ECONOMIC_EVENTS の name と完全一致させる。",
+  "events": [
+    {
+      "publishDate": "2026-06-16",
+      "type": "meeting",
+      "label": "FOMC（1 日目）",
+      "relatedMeeting": "2026-06-16/17"
+    },
+    {
+      "publishDate": "2026-06-17",
+      "publishTime": "27:00",
+      "type": "meeting",
+      "label": "FOMC 結果発表 + 経済予測",
+      "relatedMeeting": "2026-06-16/17",
+      "comment": "ドットチャート更新月"
+    },
+    {
+      "publishDate": "2026-06-17",
+      "publishTime": "27:30",
+      "type": "press",
+      "label": "FRB 議長記者会見",
+      "relatedMeeting": "2026-06-16/17"
+    },
+    {
+      "publishDate": "2026-07-28",
+      "type": "meeting",
+      "label": "FOMC（1 日目）",
+      "relatedMeeting": "2026-07-28/29"
+    },
+    {
+      "publishDate": "2026-07-29",
+      "publishTime": "27:00",
+      "type": "meeting",
+      "label": "FOMC 結果発表",
+      "relatedMeeting": "2026-07-28/29"
+    },
+    {
+      "publishDate": "2026-09-15",
+      "type": "meeting",
+      "label": "FOMC（1 日目）",
+      "relatedMeeting": "2026-09-15/16"
+    },
+    {
+      "publishDate": "2026-09-16",
+      "publishTime": "27:00",
+      "type": "meeting",
+      "label": "FOMC 結果発表 + 経済予測",
+      "relatedMeeting": "2026-09-15/16",
+      "comment": "ドットチャート更新月"
+    },
+    {
+      "publishDate": "2026-10-27",
+      "type": "meeting",
+      "label": "FOMC（1 日目）",
+      "relatedMeeting": "2026-10-27/28"
+    },
+    {
+      "publishDate": "2026-10-28",
+      "publishTime": "27:00",
+      "type": "meeting",
+      "label": "FOMC 結果発表",
+      "relatedMeeting": "2026-10-27/28"
+    }
+  ]
+}

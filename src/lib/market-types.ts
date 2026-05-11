@@ -106,13 +106,19 @@ export type Snapshot = {
 
 export type EventImportance = 1 | 2 | 3;
 export type Country = "JP" | "US" | "CN" | "EU" | "GB" | "OTHER";
+// v0.7.0 で追加。macro=マクロ経済指標、geopolitical=要人訪問・首脳会談・地政学日程、policy=政治・政策イベント（選挙・予算・サミット等）
+export type EventCategory = "macro" | "geopolitical" | "policy";
 
 export type EconomicEvent = {
   date: string;
+  // v0.7.0 で追加。期間イベント（要人訪問・サミット等）の終了日。省略時は単日イベント
+  endDate?: string;
   time?: string;
   country: Country;
   name: string;
   importance: EventImportance;
+  // v0.7.0 で追加。省略時は "macro" 扱い（後方互換）
+  category?: EventCategory;
   note?: string;
   forecast?: string;
   actual?: string;

@@ -1,10 +1,19 @@
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import {
   ECONOMIC_EVENTS,
+  filterByCategory,
   getEventsForDate,
   getEventsForWeek,
   jstDateKey,
 } from "../economic-events.js";
+import type { EconomicEvent } from "../market-types.js";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+// __dirname = src/lib/__tests__ → repo root は ../../../
+const REPO_ROOT = join(__dirname, "..", "..", "..");
 
 // JST 基準で曜日番号を返す（0=日曜, 6=土曜）。
 function jstDayOfWeek(dateKey: string): number {
@@ -17,14 +26,17 @@ function jstDayOfWeek(dateKey: string): number {
 }
 
 describe("ECONOMIC_EVENTS data integrity", () => {
-  it("全イベントは土日に登録されていない（市場休場の祝日エントリのみ例外）", () => {
+  it("全イベントは土日に登録されていない（市場休場・地政学イベントのみ例外）", () => {
     const offenders = ECONOMIC_EVENTS.filter((e) => {
       const dow = jstDayOfWeek(e.date);
       const isWeekend = dow === 0 || dow === 6;
       // 例外: 名前に「休場」を含む祝日エントリは固定日のため土日もあり得る
       // （例: 米独立記念日 7/4 が土曜の年など）
       const isMarketClosure = e.name.includes("休場");
-      return isWeekend && !isMarketClosure;
+      // 例外: 地政学・政治イベント（訪問・サミット・選挙等）は土日開催あり得る
+      const isNonMacro =
+        (e.category ?? "macro") !== "macro";
+      return isWeekend && !isMarketClosure && !isNonMacro;
     });
     if (offenders.length > 0) {
       // 失敗時に詳細を出すため map で整形
@@ -133,5 +145,155 @@ describe("ECONOMIC_EVENTS data integrity", () => {
     // UTC 2026-05-08T15:00 = JST 2026-05-09T00:00
     const utc = new Date("2026-05-08T15:00:00Z");
     expect(jstDateKey(utc)).toBe("2026-05-09");
+  });
+});
+
+describe("期間イベント (endDate) のヒット判定", () => {
+  // テスト専用の最小データセット。ECONOMIC_EVENTS への依存を避ける。
+  const periodEvents: EconomicEvent[] = [
+    {
+      date: "2026-05-11",
+      endDate: "2026-05-13",
+      country: "US",
+      name: "テスト訪日",
+      importance: 2,
+      category: "geopolitical",
+    },
+    {
+      date: "2026-05-12",
+      country: "US",
+      name: "テスト単日マクロ",
+      importance: 3,
+    },
+  ];
+
+  it("開始日 5/11 で期間イベントがヒットする", () => {
+    const events = getEventsForDate("2026-05-11", periodEvents);
+    expect(events.some((e) => e.name === "テスト訪日")).toBe(true);
+  });
+
+  it("中日 5/12 で期間イベントがヒットする", () => {
+    const events = getEventsForDate("2026-05-12", periodEvents);
+    expect(events.some((e) => e.name === "テスト訪日")).toBe(true);
+  });
+
+  it("終了日 5/13 で期間イベントがヒットする", () => {
+    const events = getEventsForDate("2026-05-13", periodEvents);
+    expect(events.some((e) => e.name === "テスト訪日")).toBe(true);
+  });
+
+  it("開始前日 5/10 では期間イベントがヒットしない", () => {
+    const events = getEventsForDate("2026-05-10", periodEvents);
+    expect(events.some((e) => e.name === "テスト訪日")).toBe(false);
+  });
+
+  it("終了翌日 5/14 では期間イベントがヒットしない", () => {
+    const events = getEventsForDate("2026-05-14", periodEvents);
+    expect(events.some((e) => e.name === "テスト訪日")).toBe(false);
+  });
+
+  it("getEventsForWeek は期間イベントが週レンジに重なれば含める", () => {
+    // 5/14〜5/20 の週には期間 5/11-5/13 は重ならない
+    const noOverlap = getEventsForWeek("2026-05-14", periodEvents);
+    expect(noOverlap.some((e) => e.name === "テスト訪日")).toBe(false);
+
+    // 5/13〜5/19 の週には期間 5/11-5/13 が末尾 5/13 で重なる
+    const partial = getEventsForWeek("2026-05-13", periodEvents);
+    expect(partial.some((e) => e.name === "テスト訪日")).toBe(true);
+
+    // 5/7〜5/13 の週には期間がすっぽり収まる
+    const fullyContained = getEventsForWeek("2026-05-07", periodEvents);
+    expect(fullyContained.some((e) => e.name === "テスト訪日")).toBe(true);
+  });
+
+  it("ベッセント訪日 (本物データ) が 5/11・5/12・5/13 でヒットする", () => {
+    const days = ["2026-05-11", "2026-05-12", "2026-05-13"];
+    days.forEach((d) => {
+      const events = getEventsForDate(d);
+      const hit = events.some((e) => e.name.includes("ベッセント"));
+      expect(hit, `日付 ${d} でベッセント訪日がヒットしない`).toBe(true);
+    });
+  });
+});
+
+describe("中銀イベントは公式日程 JSON と一致する", () => {
+  // 2026-05-11 に発生した「日銀 議事要旨 5/11 (実際は 5/12 主な意見)」の再発防止。
+  // 種別取り違え + 日付ズレは vitest の形式チェックでは原理的に捕捉不能のため、
+  // data/central-bank-schedules/*.json を一次ソースとして双方向ではなく一方向比較。
+  const CENTRAL_BANK_KEYWORDS = ["日銀", "FOMC", "FRB 議長", "ECB"];
+  const SOURCES = [
+    "data/central-bank-schedules/boj.json",
+    "data/central-bank-schedules/fomc.json",
+    "data/central-bank-schedules/ecb.json",
+  ];
+
+  function loadOfficialKeys(): Set<string> {
+    const keys = new Set<string>();
+    for (const relPath of SOURCES) {
+      const fullPath = join(REPO_ROOT, relPath);
+      const data = JSON.parse(readFileSync(fullPath, "utf-8")) as {
+        events: Array<{ publishDate: string; publishTime?: string; label: string }>;
+      };
+      for (const ev of data.events) {
+        keys.add(`${ev.publishDate}|${ev.publishTime ?? ""}|${ev.label}`);
+      }
+    }
+    return keys;
+  }
+
+  it("TS 中銀エントリは全て data/central-bank-schedules/*.json に存在する", () => {
+    const officialKeys = loadOfficialKeys();
+    const tsCentralBank = ECONOMIC_EVENTS.filter((e) =>
+      CENTRAL_BANK_KEYWORDS.some((kw) => e.name.includes(kw)),
+    );
+    expect(tsCentralBank.length).toBeGreaterThan(0);
+
+    const missing = tsCentralBank.filter((e) => {
+      const key = `${e.date}|${e.time ?? ""}|${e.name}`;
+      return !officialKeys.has(key);
+    });
+
+    if (missing.length > 0) {
+      const detail = missing.map(
+        (e) => `${e.date} ${e.time ?? "(終日)"} ★${e.importance} ${e.name}`,
+      );
+      throw new Error(
+        `公式日程 JSON に存在しない TS 中銀エントリが ${missing.length} 件あります（公式と種別/日付が一致しないか、JSON 側が未更新）:\n${detail.join("\n")}`,
+      );
+    }
+    expect(missing).toEqual([]);
+  });
+});
+
+describe("filterByCategory", () => {
+  const mixed: EconomicEvent[] = [
+    { date: "2026-05-11", country: "JP", name: "macro 既定", importance: 2 },
+    { date: "2026-05-11", country: "US", name: "明示 macro", importance: 2, category: "macro" },
+    { date: "2026-05-11", country: "US", name: "geopolitical", importance: 2, category: "geopolitical" },
+    { date: "2026-05-11", country: "JP", name: "policy", importance: 2, category: "policy" },
+  ];
+
+  it("categories 未指定なら全件返す", () => {
+    expect(filterByCategory(mixed, undefined)).toHaveLength(4);
+  });
+
+  it("空配列なら全件返す", () => {
+    expect(filterByCategory(mixed, [])).toHaveLength(4);
+  });
+
+  it("macro のみで category 未指定エントリも含める（後方互換）", () => {
+    const result = filterByCategory(mixed, ["macro"]);
+    expect(result.map((e) => e.name).sort()).toEqual(["macro 既定", "明示 macro"]);
+  });
+
+  it("geopolitical のみで他を除外", () => {
+    const result = filterByCategory(mixed, ["geopolitical"]);
+    expect(result).toHaveLength(1);
+    expect(result[0].name).toBe("geopolitical");
+  });
+
+  it("複数カテゴリ指定の OR フィルタ", () => {
+    const result = filterByCategory(mixed, ["geopolitical", "policy"]);
+    expect(result.map((e) => e.name).sort()).toEqual(["geopolitical", "policy"]);
   });
 });
