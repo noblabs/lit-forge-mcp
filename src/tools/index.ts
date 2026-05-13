@@ -7,6 +7,7 @@
 // v0.4.0 で 5 ツール追加（温度計・ランキング・イールドスプレッド・市場時間・セクターヒートマップ）。
 // 銘柄数 9 → 28 に拡大。
 // v0.6.0 で 2 ツール追加（配当履歴・アナリストコンセンサス）+ get_quote にファンダメンタル指標オプション。
+// v0.8.0 で地政学イベント専用ツール get_geopolitical_events を追加（首脳会談・サミット・選挙・地政学リスクの 4 サブカテゴリ）。
 
 import { simulateNisaTool } from "./simulate-nisa.js";
 import { planRetirementTool } from "./plan-retirement.js";
@@ -22,6 +23,7 @@ import { getMarketSessionsTool } from "./get-market-sessions.js";
 import { getSectorHeatmapTool } from "./get-sector-heatmap.js";
 import { getDividendHistoryTool } from "./get-dividend-history.js";
 import { getAnalystConsensusTool } from "./get-analyst-consensus.js";
+import { getGeopoliticalEventsTool } from "./get-geopolitical-events.js";
 
 export const tools = [
   simulateNisaTool,
@@ -40,4 +42,6 @@ export const tools = [
   // v0.6.0 新規ツール
   getDividendHistoryTool,
   getAnalystConsensusTool,
+  // v0.8.0 新規ツール
+  getGeopoliticalEventsTool,
 ];
