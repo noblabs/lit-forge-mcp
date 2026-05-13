@@ -19,7 +19,8 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-05-08", time: "21:30", country: "US", name: "米 雇用統計（4 月）", importance: 3, note: "非農業部門雇用者数・失業率・平均時給" },
   { date: "2026-05-05", time: "23:00", country: "US", name: "米 ISM 非製造業 PMI（4 月）", importance: 2 },
   { date: "2026-05-12", time: "08:50", country: "JP", name: "日銀 主な意見（4 月会合分）", importance: 2, note: "4 月 27-28 日会合分。公表は会合の約 2 週間後" },
-  { date: "2026-05-11", endDate: "2026-05-13", country: "US", name: "ベッセント米財務長官 訪日（〜5/13）", importance: 2, category: "geopolitical", note: "為替・関税協議の文脈。日米財務対話の有無に注目" },
+  // v0.7.0 で追加したベッセント訪日エントリは v0.8.0 で GEOPOLITICAL_EVENTS に移行。
+  // 地政学イベントは get_geopolitical_events ツール経由で取得する。
   { date: "2026-05-12", time: "21:30", country: "US", name: "米 CPI（4 月）", importance: 3, note: "総合・コア前年比" },
   { date: "2026-05-13", time: "21:30", country: "US", name: "米 PPI（4 月）", importance: 2 },
   { date: "2026-05-14", time: "21:30", country: "US", name: "米 小売売上高（4 月）", importance: 2 },
@@ -72,7 +73,7 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-08-14", country: "JP", name: "日 SQ", importance: 1 },
   { date: "2026-08-17", time: "08:50", country: "JP", name: "日 GDP 一次速報（4-6 月期）", importance: 3 },
   { date: "2026-08-21", time: "08:30", country: "JP", name: "日 CPI（7 月）", importance: 2 },
-  { date: "2026-08-27", country: "US", name: "ジャクソンホール会議（〜29）", importance: 3, note: "FRB 議長講演に注目" },
+  { date: "2026-08-27", endDate: "2026-08-29", country: "US", name: "ジャクソンホール会議（〜29）", importance: 3, category: "macro", note: "FRB 議長講演に注目。FRB 主催の経済政策シンポジウムでありマクロ寄りのため category: macro" },
   { date: "2026-08-26", time: "21:30", country: "US", name: "米 PCE 価格指数（7 月）", importance: 3 },
 
   // ============ 2026 年 9 月 ============

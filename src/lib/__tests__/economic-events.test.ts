@@ -209,13 +209,33 @@ describe("期間イベント (endDate) のヒット判定", () => {
     expect(fullyContained.some((e) => e.name === "テスト訪日")).toBe(true);
   });
 
-  it("ベッセント訪日 (本物データ) が 5/11・5/12・5/13 でヒットする", () => {
-    const days = ["2026-05-11", "2026-05-12", "2026-05-13"];
+  it("ジャクソンホール会議 (本物データ) が 8/27〜8/29 でヒットする", () => {
+    // v0.8.0 で endDate を明示。期間ヒットの本物データ代表として残す。
+    const days = ["2026-08-27", "2026-08-28", "2026-08-29"];
     days.forEach((d) => {
       const events = getEventsForDate(d);
-      const hit = events.some((e) => e.name.includes("ベッセント"));
-      expect(hit, `日付 ${d} でベッセント訪日がヒットしない`).toBe(true);
+      const hit = events.some((e) => e.name.includes("ジャクソンホール"));
+      expect(hit, `日付 ${d} でジャクソンホール会議がヒットしない`).toBe(true);
     });
+  });
+});
+
+describe("ECONOMIC_EVENTS から地政学カテゴリは v0.8.0 で分離済み", () => {
+  it("category: 'geopolitical' のエントリは ECONOMIC_EVENTS に含まれない", () => {
+    // v0.8.0 で地政学イベントは GEOPOLITICAL_EVENTS（src/lib/geopolitical-events.ts）に分離。
+    // 誤って ECONOMIC_EVENTS に再混入することを防ぐ。
+    const offenders = ECONOMIC_EVENTS.filter(
+      (e) => e.category === "geopolitical",
+    );
+    if (offenders.length > 0) {
+      const detail = offenders.map(
+        (e) => `${e.date} ${e.name}`,
+      );
+      throw new Error(
+        `ECONOMIC_EVENTS に geopolitical カテゴリのエントリが ${offenders.length} 件混入しています。GEOPOLITICAL_EVENTS に移してください:\n${detail.join("\n")}`,
+      );
+    }
+    expect(offenders).toEqual([]);
   });
 });
 
