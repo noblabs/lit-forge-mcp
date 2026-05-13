@@ -79,15 +79,81 @@
 | 2026-05-11 | 日銀「議事要旨」を 5/11 (月) に登録 → 実際は 5/12 (火) の「主な意見」（4 月会合分） | 種別取り違え（議事要旨/主な意見）＋ 日付ズレ。前回事故 (5/9 土) の再発で、平日に置いたため土日チェックが素通り | `data/central-bank-schedules/*.json` を一次ソース化 + `verify-central-bank-events.mjs` で TS ⊆ JSON を検証（vitest 統合） |
 | 2026-05-12 | 米 CPI（4 月）を 5/13 (水) に登録 → 実際は 5/12 (火)。同類のズレが PPI / PCE / 小売売上高 / GDP 速報で計 13 件連鎖（CPI 6 月・9 月、PPI 6 月・9 月、PCE 4-9 月全件、小売 4 月・6 月、GDP 7-9 月速報）。PPI 8 月分は丸ごと欠落 | 公式スケジュール未照合のまま 6 ヶ月分一括登録（Web 検索結果から人力転記）。曜日固定ルールがある雇用統計・PCE 旧仕様では vitest が捕捉できなかった日付ズレが、PCE 旧「金曜固定」テストでも 5/29(金)→5/28(木) など曜日が偶然一致するケースで素通り | `data/us-macro-schedule/{cpi,ppi,employment,retail-sales,pce,gdp}.json` を [PFEI 2026 年版 PDF](https://www.whitehouse.gov/wp-content/uploads/2025/09/pfei_schedule_release_dates_cy2026.pdf) から一次ソース化 + `verify-us-macro-events.mjs` で TS ⊆ JSON を検証（vitest 統合）。PCE 「金曜固定」テストは BEA 実態（曜日固定でない）に合わせ「平日のみ」に緩和し、厳密検証は JSON 突合に一本化 |
 
+## 地政学イベントカレンダーの更新ルール
+
+`src/lib/geopolitical-events.ts` の `GEOPOLITICAL_EVENTS` は v0.8.0 で新設。経済イベントと同じく **半年に 1 回手動更新** する設計です。
+
+### 対象範囲
+
+| サブカテゴリ | 対象 |
+|---|---|
+| `summit` | G7 / G20 / IMF・世銀年次総会 / APEC / BRICS / NATO / ASEAN 等の国際サミット・国際会議 |
+| `bilateral` | 首脳会談・閣僚級往来（訪日・訪米等）。為替・関税・通商に影響する閣僚往来を優先 |
+| `election` | 主要国の国政選挙・国民投票（米大統領選・米中間選挙・日本国政選挙・主要欧州選挙等） |
+| `risk` | **確定済み公式日程のみ**: OFAC 制裁発動・更新、安保理決議の期限、停戦合意の期限、条約失効日 |
+
+### 中立性ガイドライン（重要）
+
+> ⚠️ 「紛争激化」「戦争リスク上昇」「政情不安」のような **主観判断を要するイベントは登録しない**。本ツールは情報集約に徹し、確定済み公式日程のみを返します。リスクの主観評価は利用者の責任で行う前提です。
+
+### 一次ソース系統（`source` フィールド）
+
+| `source` 値 | 内容 | 参照例 |
+|---|---|---|
+| `official-jp` | 日本政府公式 | [首相官邸 - 総理の活動](https://www.kantei.go.jp/jp/98_ishiba/actions/index.html) / [外務省 - 外交関連プレスリリース](https://www.mofa.go.jp/mofaj/press/release/index.html) / [外務省 - 外国要人往来](https://www.mofa.go.jp/mofaj/area/visit/) |
+| `official-intl` | 国際機関公式 | [外務省 - サミット情報](https://www.mofa.go.jp/mofaj/gaiko/summit/index.html) / [IMF Calendar](https://www.imf.org/en/News/Calendar) / 各議長国公式サイト（G7/G20）/ [NATO Calendar](https://www.nato.int/cps/en/natohq/calendar.htm) |
+| `private` | 民間集計（cross-check 用） | Reuters Diary / Bloomberg Politics Calendar / [IFES Election Guide](https://www.electionguide.org/elections/) |
+
+**ルール**: できる限り `official-jp` または `official-intl` を一次ソースとして採用し、`private` は cross-check 用に留めること。`verify:geopolitical` は `source: "private"` の比率が 30% を超えると警告を出します。
+
+### 半年に 1 回の追加 PR で必ずやること
+
+1. `data/geopolitical-events/{summits,bilateral-meetings,elections,risk-events}.json` を一次ソースから手転記し `lastSyncedAt` を当日に更新
+2. `events[].id` は kebab-case で `{subcategory}-{topic}-{yyyy-mm}` 形式（例: `summit-g7-2026-06`、`bilateral-bessent-jp-visit-2026-05`）
+3. 各エントリに `sourceUrl`（一次ソース URL）と `lastVerifiedAt`（確認日）を必ず記録
+4. `src/lib/geopolitical-events.ts` の `GEOPOLITICAL_EVENTS` に同じ `id` で TS エントリを追加。`name` は JSON 側 `label` と完全一致させる（`verify:geopolitical` が突合）
+5. `marketImplications` は確定的に書ける範囲で（為替/株/債券/コモディティへの注目点）。空欄でも可
+6. `npm run build && npm run verify:geopolitical` が exit 0 を確認
+7. `npx vitest run` で `geopolitical-events.test.ts` が全 pass
+
+### チェックリスト（PR テンプレートとして使用）
+
+```
+- [ ] data/geopolitical-events/{summits,bilateral-meetings,elections,risk-events}.json を一次ソースから更新し lastSyncedAt を当日に
+- [ ] 各エントリの id は重複なく kebab-case
+- [ ] 各エントリに sourceUrl と lastVerifiedAt を記録した
+- [ ] source が official-jp / official-intl / private のいずれか（private 比率は 30% 未満）
+- [ ] 主観判断を要するイベント（紛争激化等）は登録していない（中立性ガイドライン）
+- [ ] src/lib/geopolitical-events.ts に同じ id・同じ name の TS エントリを追加した
+- [ ] vitest で geopolitical-events.test.ts が全 pass する（npx vitest run）
+- [ ] npm run build && npm run verify:geopolitical が exit 0
+- [ ] LAST_UPDATED_GEOPOLITICAL を当日付に更新した
+```
+
+### 自動チェックされている項目
+
+`src/lib/__tests__/geopolitical-events.test.ts` で以下を検証しています:
+
+- `date` / `endDate` / `lastVerifiedAt` の yyyy-mm-dd 形式
+- `subcategory` / `source` の enum 値
+- `id` の一意性
+- `sourceUrl` の非空
+- **TS 地政学エントリは全て `data/geopolitical-events/*.json` に存在する**
+- **同一 `id` で TS の date / endDate / name が JSON の publishDate / publishEndDate / label と一致**
+- `source: "private"` 比率が 30% 未満
+
+加えて `npm run verify:geopolitical`（または `verify:all`）で同じ TS ⊆ JSON 突合を CLI から実行できます。
+
 ## ビルド・テスト
 
 ```bash
 npm install
-npm run build           # tsc
-npx vitest run          # 全テスト実行
-npm run verify:cb       # 中銀イベントを公式日程 JSON と突合（要 build 先行）
-npm run verify:us-macro # 米マクロ指標を公式日程 JSON と突合（要 build 先行）
-npm run verify:all      # 上記 2 つを連続実行
+npm run build              # tsc
+npx vitest run             # 全テスト実行
+npm run verify:cb          # 中銀イベントを公式日程 JSON と突合（要 build 先行）
+npm run verify:us-macro    # 米マクロ指標を公式日程 JSON と突合（要 build 先行）
+npm run verify:geopolitical # 地政学イベントを公式日程 JSON と突合（要 build 先行）
+npm run verify:all         # 上記 3 つを連続実行
 ```
 
 ## リリース
