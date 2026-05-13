@@ -1,17 +1,17 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.noblabs/lit-forge-mcp",
-  "description": "Personal asset planning + market data + dividends + analyst consensus. 14 tools, 28 indicators.",
+  "description": "Personal asset planning + market data + dividends + analysts + geopolitical events. 15 tools.",
   "repository": {
     "url": "https://github.com/noblabs/lit-forge-mcp",
     "source": "github"
   },
-  "version": "0.6.0",
+  "version": "0.8.0",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "lit-forge-mcp",
-      "version": "0.6.0",
+      "version": "0.8.0",
       "transport": {
         "type": "stdio"
       }
