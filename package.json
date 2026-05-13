@@ -1,6 +1,6 @@
 {
   "name": "lit-forge-mcp",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "mcpName": "io.github.noblabs/lit-forge-mcp",
   "description": "MCP server for personal asset planning + daily market check: NISA / iDeCo simulation, retirement planning, market snapshot (USD/JPY, Nikkei, S&P 500, etc.), dividend history, analyst consensus, economic events.",
   "type": "module",
@@ -47,7 +47,8 @@
     "test:watch": "vitest",
     "verify:cb": "node scripts/verify-central-bank-events.mjs",
     "verify:us-macro": "node scripts/verify-us-macro-events.mjs",
-    "verify:all": "npm run verify:cb && npm run verify:us-macro",
+    "verify:geopolitical": "node scripts/verify-geopolitical-events.mjs",
+    "verify:all": "npm run verify:cb && npm run verify:us-macro && npm run verify:geopolitical",
     "prepare": "npm run build"
   },
   "dependencies": {
