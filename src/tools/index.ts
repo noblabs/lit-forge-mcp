@@ -8,6 +8,8 @@
 // 銘柄数 9 → 28 に拡大。
 // v0.6.0 で 2 ツール追加（配当履歴・アナリストコンセンサス）+ get_quote にファンダメンタル指標オプション。
 // v0.8.0 で地政学イベント専用ツール get_geopolitical_events を追加（首脳会談・サミット・選挙・地政学リスクの 4 サブカテゴリ）。
+// v0.9.0 で地政学ツールを 2 系統に分離: get_geopolitical_calendar（確定スケジュール、旧 events からリネーム）+ get_geopolitical_pulse（リアルタイム速報、RSS アグリゲーション）。
+// 設計詳細は docs/geopolitical-realtime.md 参照。
 
 import { simulateNisaTool } from "./simulate-nisa.js";
 import { planRetirementTool } from "./plan-retirement.js";
@@ -23,7 +25,8 @@ import { getMarketSessionsTool } from "./get-market-sessions.js";
 import { getSectorHeatmapTool } from "./get-sector-heatmap.js";
 import { getDividendHistoryTool } from "./get-dividend-history.js";
 import { getAnalystConsensusTool } from "./get-analyst-consensus.js";
-import { getGeopoliticalEventsTool } from "./get-geopolitical-events.js";
+import { getGeopoliticalCalendarTool } from "./get-geopolitical-calendar.js";
+import { getGeopoliticalPulseTool } from "./get-geopolitical-pulse.js";
 
 export const tools = [
   simulateNisaTool,
@@ -42,6 +45,7 @@ export const tools = [
   // v0.6.0 新規ツール
   getDividendHistoryTool,
   getAnalystConsensusTool,
-  // v0.8.0 新規ツール
-  getGeopoliticalEventsTool,
+  // v0.9.0 新規 / リネーム: 地政学カレンダー（旧 get_geopolitical_events）+ リアルタイム速報
+  getGeopoliticalCalendarTool,
+  getGeopoliticalPulseTool,
 ];

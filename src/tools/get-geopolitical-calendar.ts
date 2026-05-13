@@ -1,12 +1,13 @@
-// 地政学イベント専用ツール（v0.8.0 新設）。
-// 首脳会談・要人訪問・国際サミット・主要国選挙・確定済み地政学リスクを構造化して返す。
-// 既存 get_economic_events_today の geopolitical カテゴリと並存（破壊的変更なし）し、
-// 本ツールは marketImplications / participants / sourceUrl など地政学固有フィールドを伴う。
+// 地政学カレンダー（v0.9.0 で get_geopolitical_events からリネーム）。
+// **確定済み公式スケジュール専用**: 首脳会談・国際サミット・主要国選挙・公式リスク日程（制裁発動・条約期限など）。
+// 進行中の地政学リスクや突発イベントは別ツール get_geopolitical_pulse で取得すること。
+//
+// データは手動キュレーション JSON（半年に 1 回 PR 更新）。
+// 中立性ガイドライン: 確定済み公式日程のみ収録し、主観判断を要するイベント（紛争激化等）は登録しない。
 
 import { z } from "zod";
 import { COUNTRY_LABEL, jstDateKey } from "../lib/economic-events.js";
 import {
-  GEOPOLITICAL_EVENTS,
   LAST_UPDATED_GEOPOLITICAL,
   SOURCE_LABEL,
   SUBCATEGORY_LABEL,
@@ -43,12 +44,13 @@ const inputSchema = {
     .describe("最低重要度フィルタ: 1=★以上 / 2=★★以上 / 3=★★★のみ。既定 1"),
 };
 
-export const getGeopoliticalEventsTool: LitForgeTool = {
-  name: "get_geopolitical_events",
-  title: "地政学イベントカレンダー（首脳会談・サミット・選挙・リスク）",
+export const getGeopoliticalCalendarTool: LitForgeTool = {
+  name: "get_geopolitical_calendar",
+  title: "地政学カレンダー（確定済み公式スケジュール: 首脳会談・サミット・選挙・公式リスク日程）",
   description:
-    "本日・今週・今月の地政学イベントを返します。首脳会談・要人訪問（bilateral）、G7/G20/IMF/APEC/BRICS/NATO 等の国際サミット（summit）、主要国の国政選挙（election）、確定済み公式の地政学リスク日程（制裁発動・条約期限など、risk）の 4 サブカテゴリで整理されています。各イベントには市場へのインプリケーション（marketImplications: 為替・株・債券・コモディティへの注目点）、参加者（participants）、一次ソース URL（sourceUrl）が付与されます。" +
-    "データは lit-forge 運営者が一次ソース（日本政府公式・国際機関公式・民間集計）から手動キュレーション。確定済み公式日程のみ収録し、主観判断を要するイベント（紛争激化等）は登録されません。" +
+    "**確定済み公式スケジュール専用**ツール。首脳会談・要人訪問（bilateral）、G7/G20/IMF/APEC/BRICS/NATO 等の国際サミット（summit）、主要国の国政選挙（election）、公式の地政学リスク日程（制裁発動・条約期限など、risk）の 4 サブカテゴリを返します。各イベントには market implications（為替・株・債券・コモディティへの注目点）、参加者、一次ソース URL が付与されます。" +
+    "データは lit-forge 運営者が一次ソース（日本政府公式・国際機関公式・民間集計）から手動キュレーション。**半年に 1 回 PR 更新の静的データ**で、確定済み公式日程のみを収録します（主観判断要件のイベントは登録しない方針）。" +
+    "【重要】このツールは『カレンダー』であり、**進行中の地政学リスク（紛争激化・電撃会談・突発的な制裁・封鎖シナリオなど）を取りこぼします**。今この瞬間の地政学情勢を知りたいときは別ツール `get_geopolitical_pulse` を使ってください。" +
     "【利用上の注意】既定 range=week。さらに先まで見たい場合は range=\"month\" を指定。マクロ経済イベント（CPI・FOMC・日銀会合等）は別ツール `get_economic_events_today` を使用。",
   inputSchema,
   handler: ({ range, subcategory, country, minImportance }) => {
@@ -88,7 +90,7 @@ export const getGeopoliticalEventsTool: LitForgeTool = {
         note: e.note,
       })),
       note:
-        "地政学イベントは確定済み公式日程のみ収録。半年に 1 回 PR で更新。急な日程変更や臨時会合は反映されない場合があります。",
+        "確定済み公式日程のみのカレンダーです。半年に 1 回 PR で更新するため、突発イベント（電撃会談・紛争激化・即時制裁など）は反映されません。リアルタイム情勢は get_geopolitical_pulse を併用してください。",
     });
   },
 };

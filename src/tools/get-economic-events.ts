@@ -41,7 +41,7 @@ export const getEconomicEventsTodayTool: LitForgeTool = {
   description:
     "本日（または今週）の主要経済イベント（FOMC・日銀金融政策決定会合・米雇用統計・CPI・GDP・中国 PMI などのマクロ指標）を返します。期間イベント（ジャクソンホール会議等）は期間中の各日に today クエリでヒットします。データは lit-forge 運営者が手動キュレーションした半年分のスケジュール。" +
     "【利用上の注意】既定 range=today は当日分のみを返すため、ユーザーの質問が『明日』『今週』『週末』『次の指標』など今日を超える時間軸を含むときは range=\"week\" を明示すること。直前に today で取得済みでも、未来の時間軸が話題に出た時点で week で取り直す。" +
-    "【v0.8.0 以降】首脳会談・要人訪問・国際サミット・主要国選挙・地政学リスクの 4 サブカテゴリは別ツール `get_geopolitical_events` に分離されました。地政学情報が必要なときはそちらを使用してください。本ツールの category=\"geopolitical\" 引数は後方互換のため残されていますが、結果は空に近くなります。",
+    "【v0.9.0 以降】首脳会談・要人訪問・国際サミット・主要国選挙・地政学リスクの 4 サブカテゴリは `get_geopolitical_calendar`（確定スケジュール）に、進行中の地政学情勢は `get_geopolitical_pulse`（リアルタイム速報）に分離されました。地政学情報が必要なときはそれらを使用してください。本ツールの category=\"geopolitical\" 引数は後方互換のため残されていますが、結果は空に近くなります。",
   inputSchema,
   handler: ({ range, minImportance, category }) => {
     const today = jstDateKey();
@@ -67,7 +67,7 @@ export const getEconomicEventsTodayTool: LitForgeTool = {
       note:
         "経済イベントは半年に 1 回手動更新。急な発表変更や中銀緊急会合は反映されない場合があります。" +
         (requestedGeopolitical
-          ? " ※ 地政学イベント（首脳会談・サミット・選挙・地政学リスク）は v0.8.0 で別ツール `get_geopolitical_events` に分離されました。詳細はそちらをご利用ください。"
+          ? " ※ 地政学イベントは v0.9.0 で `get_geopolitical_calendar`（確定スケジュール）+ `get_geopolitical_pulse`（リアルタイム速報）に分離されました。詳細はそちらをご利用ください。"
           : ""),
     });
   },

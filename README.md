@@ -8,9 +8,9 @@
 
 Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI クライアントで動作します。
 
-> **v0.2.0 で「金融・個人投資家特化」にピボット**、**v0.3.0 で「毎朝の市況チェック」系 3 ツールを追加**、**v0.4.0 で銘柄数 9 → 28 に拡大 + 5 つの分析ツール追加**、**v0.6.0 で配当履歴・アナリストコンセンサス・ファンダメンタル指標を追加**、**v0.7.0 で経済イベントに地政学カテゴリ（要人訪問・首脳会談）と複数日イベント（endDate）対応を追加**、**v0.8.0 で地政学イベント専用ツール `get_geopolitical_events` を新設**（首脳会談・国際サミット・主要国選挙・地政学リスクの 4 サブカテゴリを market implications 付きで返す + 一次ソース突合の verify インフラ整備）しました。
+> **v0.2.0 で「金融・個人投資家特化」にピボット**、**v0.3.0 で「毎朝の市況チェック」系 3 ツールを追加**、**v0.4.0 で銘柄数 9 → 28 に拡大 + 5 つの分析ツール追加**、**v0.6.0 で配当履歴・アナリストコンセンサス・ファンダメンタル指標を追加**、**v0.7.0 で経済イベントに地政学カテゴリ（要人訪問・首脳会談）と複数日イベント（endDate）対応を追加**、**v0.8.0 で地政学イベント専用ツール `get_geopolitical_events` を新設**（首脳会談・国際サミット・主要国選挙・地政学リスクの 4 サブカテゴリを market implications 付きで返す + 一次ソース突合の verify インフラ整備）、**v0.9.0 で地政学ツールを 2 系統に分離・リアルタイム化**: 旧 `get_geopolitical_events` を `get_geopolitical_calendar` にリネーム（用途を確定スケジュール専用に明確化）、新ツール `get_geopolitical_pulse` を追加（BBC World / Al Jazeera / Google News の主要通信社 RSS を集約し、進行中の地政学リスク・突発イベントをリアルタイムで返す）しました。
 
-## 提供ツール（15 種）
+## 提供ツール（16 種）
 
 ### 個人資産形成プランナー（純関数、外部 API 不要）
 
@@ -26,8 +26,9 @@ Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI �
 | ツール名 | 説明 |
 |---|---|
 | `get_market_snapshot` | USD/JPY・EUR/JPY・GBP/JPY・AUD/JPY・EUR/USD・CHF/JPY・ドル指数・日経平均・TOPIX・NY ダウ・S&P 500・NASDAQ・VIX・NYSE FANG+・SOX・DAX・FTSE・上海総合・ハンセン・KOSPI・SENSEX・米10年/5年金利・金・原油・銅・ビットコイン・イーサリアム の主要 28 指標を一括取得 |
-| `get_economic_events_today` | 当日 or 今週の経済イベント（FOMC・日銀金融政策決定会合・米雇用統計・CPI・GDP・中国 PMI 等のマクロ指標）を重要度付きで返す。`category` で `macro` / `policy` に絞り込み可能。期間イベント（ジャクソンホール会議等）は `endDate` で複数日対応。半年分を手動キュレーション。※ v0.8.0 で地政学イベント（首脳会談・サミット・選挙）は `get_geopolitical_events` に分離 |
-| `get_geopolitical_events` | **v0.8.0 新規**。本日・今週・今月の地政学イベントを 4 サブカテゴリ（summit=国際サミット / bilateral=首脳会談・要人訪問 / election=主要国選挙 / risk=確定済み地政学リスク）で返す。`marketImplications`（為替・株・債券への注目点）、`participants`、`sourceUrl`（一次ソース URL）付き。`country` 絞り込み可。データは日本政府公式・国際機関公式・民間集計から手動キュレーションし、`verify:geopolitical` で TS⊆JSON 突合 |
+| `get_economic_events_today` | 当日 or 今週の経済イベント（FOMC・日銀金融政策決定会合・米雇用統計・CPI・GDP・中国 PMI 等のマクロ指標）を重要度付きで返す。`category` で `macro` / `policy` に絞り込み可能。期間イベント（ジャクソンホール会議等）は `endDate` で複数日対応。半年分を手動キュレーション。※ v0.9.0 で地政学イベントは `get_geopolitical_calendar` / `get_geopolitical_pulse` に分離 |
+| `get_geopolitical_calendar` | **v0.9.0 で `get_geopolitical_events` からリネーム**。**確定済み公式スケジュール専用**: 本日・今週・今月の地政学イベントを 4 サブカテゴリ（summit / bilateral / election / risk）で返す。`marketImplications` / `participants` / `sourceUrl` 付き。半年に 1 回 PR で手動更新の静的データ。進行中の地政学リスクは `get_geopolitical_pulse` を使用 |
+| `get_geopolitical_pulse` | **v0.9.0 新規**。**リアルタイム速報**: BBC World・Al Jazeera・Google News（トピック検索）の RSS を並列取得し、進行中の地政学イベント（首脳会談・紛争・制裁・封鎖シナリオ等）を最新順で返す。`topic`: us-china / middle-east / ukraine / japan / global。記事メタデータ（タイトル・配信元・配信日時・URL）のみで、解釈は呼び出し側 LLM の責務 |
 | `get_quote` | 任意の Yahoo Finance ティッカー（株・為替・指数・コモディティ・暗号資産）の現在値・前日比を取得。例: `AAPL` / `^DJI` / `BTC-USD`。`includeFundamentals: true` で PER / PBR / 配当利回り / ベータ / 時価総額も取得（v0.6.0） |
 
 ### 分析ツール（v0.4.0 新規）
@@ -51,7 +52,7 @@ Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI �
 >
 > v0.6.0 で `get_quote includeFundamentals=true` / `get_dividend_history` / `get_analyst_consensus` の 3 ルートが Yahoo Finance v10 quoteSummary（crumb 認証あり）を経由するため、`yahoo-finance2` パッケージを依存に追加しました。
 
-Claude / GPT / Cursor との対話の中で「老後資金大丈夫？」「月いくら積み立てれば？」「今日の市況を要約して」「FOMC は今週いつ？」「マーケット温度計は？」「セクターでどこが強い？」「今月の G7 サミットは？」「次の米中首脳会談はいつ？」を即座に試算・確認できます。
+Claude / GPT / Cursor との対話の中で「老後資金大丈夫？」「月いくら積み立てれば？」「今日の市況を要約して」「FOMC は今週いつ？」「マーケット温度計は？」「セクターでどこが強い？」「今月の G7 サミットは？」「次の米中首脳会談はいつ？」「**今のイラン情勢は？**」「**ウクライナ和平の最新ニュースは？**」を即座に試算・確認できます。
 
 ## インストール / 設定
 

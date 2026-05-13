@@ -20,7 +20,7 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-05-05", time: "23:00", country: "US", name: "米 ISM 非製造業 PMI（4 月）", importance: 2 },
   { date: "2026-05-12", time: "08:50", country: "JP", name: "日銀 主な意見（4 月会合分）", importance: 2, note: "4 月 27-28 日会合分。公表は会合の約 2 週間後" },
   // v0.7.0 で追加したベッセント訪日エントリは v0.8.0 で GEOPOLITICAL_EVENTS に移行。
-  // 地政学イベントは get_geopolitical_events ツール経由で取得する。
+  // 地政学イベントは get_geopolitical_calendar（確定スケジュール）/ get_geopolitical_pulse（速報）ツール経由で取得する。
   { date: "2026-05-12", time: "21:30", country: "US", name: "米 CPI（4 月）", importance: 3, note: "総合・コア前年比" },
   { date: "2026-05-13", time: "21:30", country: "US", name: "米 PPI（4 月）", importance: 2 },
   { date: "2026-05-14", time: "21:30", country: "US", name: "米 小売売上高（4 月）", importance: 2 },
