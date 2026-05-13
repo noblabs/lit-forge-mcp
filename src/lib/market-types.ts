@@ -124,3 +124,34 @@ export type EconomicEvent = {
   actual?: string;
   previous?: string;
 };
+
+// v0.8.0 で追加。地政学イベントのサブカテゴリ。
+// summit=国際サミット・国際会議 / bilateral=首脳会談・要人訪問 / election=主要国選挙 / risk=確定済みの地政学リスク日程（制裁・条約期限等）
+export type GeopoliticalSubcategory = "summit" | "bilateral" | "election" | "risk";
+
+// 一次ソース系統。official-jp=日本政府公式（首相官邸・外務省）/ official-intl=国際機関公式（G7/G20/IMF/NATO 等）/ private=民間集計（Reuters Diary 等）
+export type GeopoliticalSourceTier = "official-jp" | "official-intl" | "private";
+
+// 地政学イベント本体。EconomicEvent と別型にして地政学固有フィールドを必須化する。
+// id は data/geopolitical-events/*.json との突合キー（verify:geopolitical で TS⊆JSON 検証）。
+export type GeopoliticalEvent = {
+  id: string;
+  date: string;
+  endDate?: string;
+  time?: string;
+  country: Country;
+  name: string;
+  subcategory: GeopoliticalSubcategory;
+  importance: EventImportance;
+  participants?: readonly string[];
+  marketImplications?: {
+    fx?: string;
+    equity?: string;
+    bond?: string;
+    commodity?: string;
+  };
+  source: GeopoliticalSourceTier;
+  sourceUrl: string;
+  lastVerifiedAt: string;
+  note?: string;
+};
