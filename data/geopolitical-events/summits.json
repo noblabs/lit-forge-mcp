@@ -1,0 +1,9 @@
+{
+  "source": "https://www.mofa.go.jp/mofaj/gaiko/summit/index.html",
+  "sourceCalendar": "https://www.imf.org/en/News/Calendar",
+  "lastSyncedAt": "2026-05-13",
+  "scopeStart": "2026-05-01",
+  "scopeEnd": "2026-10-31",
+  "comment": "G7/G20/IMF 年次総会/APEC/BRICS/NATO 等の国際サミット・国際会議。一次ソースは外務省サミット情報ページ + 議長国公式サイト + IMF カレンダー。確定した公式日程のみ登録する（議長国未確定や開催地未定の段階では登録しない）。",
+  "events": []
+}

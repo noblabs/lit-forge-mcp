@@ -1,0 +1,9 @@
+{
+  "source": "https://www.mofa.go.jp/mofaj/area/index.html",
+  "sourceCalendar": "https://www.electionguide.org/elections/",
+  "lastSyncedAt": "2026-05-13",
+  "scopeStart": "2026-05-01",
+  "scopeEnd": "2026-10-31",
+  "comment": "主要国の国政選挙・国民投票。日本・米国・英国・独・仏・伊・EU議会・中国全人代など、為替や株式市場に影響する政治日程のみ収録。一次ソースは各国選挙管理委員会公式 + IFES Election Guide。",
+  "events": []
+}

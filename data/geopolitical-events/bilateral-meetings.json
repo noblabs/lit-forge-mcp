@@ -1,0 +1,27 @@
+{
+  "source": "https://www.mofa.go.jp/mofaj/press/release/index.html",
+  "sourceCalendar": "https://www.kantei.go.jp/jp/kakugikettei/index.html",
+  "lastSyncedAt": "2026-05-13",
+  "scopeStart": "2026-05-01",
+  "scopeEnd": "2026-10-31",
+  "comment": "首脳会談・閣僚級往来など二国間外交日程。一次ソースは外務省「外交関連プレスリリース」と首相官邸「総理の活動」。id は src/lib/geopolitical-events.ts の GEOPOLITICAL_EVENTS と完全一致させる（verify:geopolitical の突合キー）。半年分まとめて PR で更新する運用。",
+  "events": [
+    {
+      "id": "bilateral-bessent-jp-visit-2026-05",
+      "publishDate": "2026-05-11",
+      "publishEndDate": "2026-05-13",
+      "label": "ベッセント米財務長官 訪日（〜5/13）",
+      "subcategory": "bilateral",
+      "country": "US",
+      "importance": 2,
+      "participants": ["米国（ベッセント財務長官）", "日本"],
+      "marketImplications": {
+        "fx": "ドル円・日米財務対話の有無に注目。関税協議の文脈も含む"
+      },
+      "source": "official-jp",
+      "sourceUrl": "https://www.mofa.go.jp/mofaj/area/usa/index.html",
+      "lastVerifiedAt": "2026-05-13",
+      "note": "為替・関税協議の文脈。日米財務対話の有無に注目"
+    }
+  ]
+}

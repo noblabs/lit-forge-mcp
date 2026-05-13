@@ -1,0 +1,9 @@
+{
+  "source": "https://ofac.treasury.gov/recent-actions",
+  "sourceCalendar": "https://www.un.org/securitycouncil/sanctions/information",
+  "lastSyncedAt": "2026-05-13",
+  "scopeStart": "2026-05-01",
+  "scopeEnd": "2026-10-31",
+  "comment": "地政学リスクのうち『確定済み公式日程』のみ収録。例: OFAC 制裁発動・更新日、安保理決議の期限、停戦合意の期限、条約失効日。『紛争激化』『戦争リスク上昇』など主観判断を要するイベントは登録しない（中立性ガイドライン）。",
+  "events": []
+}
