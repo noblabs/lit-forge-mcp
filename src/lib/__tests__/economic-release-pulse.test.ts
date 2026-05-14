@@ -7,7 +7,15 @@ import {
   parseCaoTime,
   parseCaoGdpTable,
 } from "../economic-release-pulse/adapters/cao.js";
-import { jstParts, jstToday, jstDatePlus } from "../economic-release-pulse/util.js";
+import { parseEmpireStateTable } from "../economic-release-pulse/adapters/nyfed.js";
+import { parseG17Releases } from "../economic-release-pulse/adapters/frb.js";
+import {
+  jstParts,
+  jstToday,
+  jstDatePlus,
+  isUsEasternDst,
+  etToJst,
+} from "../economic-release-pulse/util.js";
 
 describe("parseCaoDate", () => {
   it("和暦括弧・曜日付きの内閣府形式をパースする", () => {
@@ -109,5 +117,113 @@ describe("jstParts / jstToday / jstDatePlus", () => {
   it("jstDatePlus は JST で N 日後を返す", () => {
     expect(jstDatePlus(6, new Date("2026-05-14T15:00:00Z"))).toBe("2026-05-21");
     expect(jstDatePlus(0, new Date("2026-05-14T15:00:00Z"))).toBe("2026-05-15");
+  });
+});
+
+describe("isUsEasternDst / etToJst", () => {
+  it("夏（DST 期間）と冬（標準時）を判定する", () => {
+    expect(isUsEasternDst("2026-05-15")).toBe(true);
+    expect(isUsEasternDst("2026-07-04")).toBe(true);
+    expect(isUsEasternDst("2026-01-15")).toBe(false);
+    expect(isUsEasternDst("2026-12-25")).toBe(false);
+  });
+  it("ET 午前を JST 夜（同日）に変換する — DST 期間は +13h", () => {
+    expect(etToJst("2026-05-15", "08:30")).toEqual({
+      date: "2026-05-15",
+      time: "21:30",
+    });
+    expect(etToJst("2026-05-15", "09:15")).toEqual({
+      date: "2026-05-15",
+      time: "22:15",
+    });
+  });
+  it("ET 午前を JST 夜（同日）に変換する — 標準時は +14h", () => {
+    expect(etToJst("2026-01-15", "08:30")).toEqual({
+      date: "2026-01-15",
+      time: "22:30",
+    });
+    expect(etToJst("2026-01-15", "09:15")).toEqual({
+      date: "2026-01-15",
+      time: "23:15",
+    });
+  });
+});
+
+describe("parseEmpireStateTable", () => {
+  // NY 連銀 overview ページの greyborder テーブル実構造を模した fixture。
+  const FIXTURE = `
+<table width="100%" class="greyborder" border="0">
+<tbody>
+<tr class="tdtblhdr">
+<td class="tdhdrcol" style="width: 105px;"><div>JAN</div></td>
+<td class="tdhdrcolR" style="width: 105px;"><div>FEB </div></td>
+</tr>
+<tr valign="top">
+<td class="dirCol" style="width: 105px; height: 50px;"><div>15<a href="/medialibrary/media/survey/empire/empire2026/esms_2026_01.pdf?sc_lang=en">&nbsp;report</a></div></td>
+<td class="dirCol" style="width: 105px; height: 50px;"><div>17<a href="/medialibrary/media/survey/empire/empire2026/esms_2026_02.pdf">&nbsp;report</a></div></td>
+</tr>
+<tr class="tdtblhdr">
+<td class="tdhdrcol" style="width: 105px;"><div>MAY</div></td>
+</tr>
+<tr valign="top">
+<td class="dirCol" style="width: 105px; height: 50px;"><div>15<a href="/medialibrary/media/survey/empire/empire2026/esms_2026_05.pdf">&nbsp;report</a></div></td>
+</tr>
+</tbody>
+</table>`;
+
+  it("月名ヘッダと日付セルを zip して ReleaseEvent に変換する", () => {
+    const events = parseEmpireStateTable(FIXTURE);
+    expect(events).toHaveLength(3);
+    // JAN 15（標準時）→ 22:30 JST 同日
+    expect(events[0]).toEqual({
+      date: "2026-01-15",
+      time: "22:30",
+      country: "US",
+      name: "米 NY 連銀製造業景気指数",
+      source: "NY 連銀",
+      sourceUrl:
+        "https://www.newyorkfed.org/survey/empire/empiresurvey_overview.html",
+    });
+    expect(events[1].date).toBe("2026-02-17");
+    // MAY 15（DST 期間）→ 21:30 JST 同日
+    expect(events[2]).toMatchObject({ date: "2026-05-15", time: "21:30" });
+  });
+
+  it("greyborder テーブルが無ければ空配列", () => {
+    expect(parseEmpireStateTable("<html>no table</html>")).toEqual([]);
+  });
+});
+
+describe("parseG17Releases", () => {
+  // FRB G.17 default ページの 2026 リリース節を模した fixture。
+  // 「May 15」と「,」の間に <a>(most recent monthly)</a> が挟まるケースを含む。
+  const FIXTURE = `
+<h5>The monthly G.17 release will be released at 9:15 a.m. on these dates:</h5>
+<p><strong>2026:</strong>
+January&nbsp;16,
+February&nbsp;18,
+May&nbsp;15 <a href="Current/default.htm">(most recent monthly)</a>,
+and December&nbsp;16.
+</p>`;
+
+  it("年ブロックから月名+日を全抽出して ReleaseEvent に変換する", () => {
+    const events = parseG17Releases(FIXTURE);
+    expect(events).toHaveLength(4);
+    // January 16（標準時）→ 23:15 JST 同日
+    expect(events[0]).toEqual({
+      date: "2026-01-16",
+      time: "23:15",
+      country: "US",
+      name: "米 鉱工業生産",
+      source: "FRB",
+      sourceUrl: "https://www.federalreserve.gov/releases/g17/default.htm",
+    });
+    // <a> が挟まる May 15（DST 期間）も拾える → 22:15 JST 同日
+    expect(events[2]).toMatchObject({ date: "2026-05-15", time: "22:15" });
+    expect(events[3].date).toBe("2026-12-16");
+  });
+
+  it("該当する年ブロックが無ければ空配列", () => {
+    expect(parseG17Releases("<p>no schedule here</p>")).toEqual([]);
   });
 });
