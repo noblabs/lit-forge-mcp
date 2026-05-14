@@ -10,7 +10,7 @@
 
 import type { EconomicEvent, EventCategory } from "./market-types.js";
 
-export const LAST_UPDATED = "2026-05-12";
+export const LAST_UPDATED = "2026-05-15";
 
 export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   // ============ 2026 年 5 月 ============
@@ -24,7 +24,7 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-05-12", time: "21:30", country: "US", name: "米 CPI（4 月）", importance: 3, note: "総合・コア前年比" },
   { date: "2026-05-13", time: "21:30", country: "US", name: "米 PPI（4 月）", importance: 2 },
   { date: "2026-05-14", time: "21:30", country: "US", name: "米 小売売上高（4 月）", importance: 2 },
-  { date: "2026-05-15", country: "JP", name: "日 GDP 一次速報（1-3 月期）", importance: 3 },
+  { date: "2026-05-19", time: "08:50", country: "JP", name: "日 GDP 一次速報（1-3 月期）", importance: 3 },
   { date: "2026-05-22", time: "08:30", country: "JP", name: "日 CPI（4 月）", importance: 2 },
   { date: "2026-05-28", time: "21:30", country: "US", name: "米 PCE 価格指数（4 月）", importance: 3, note: "FRB が重視するインフレ指標" },
 
@@ -35,7 +35,7 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-06-05", time: "21:30", country: "US", name: "米 雇用統計（5 月）", importance: 3 },
   { date: "2026-06-10", time: "21:30", country: "US", name: "米 CPI（5 月）", importance: 3 },
   { date: "2026-06-11", time: "21:30", country: "US", name: "米 PPI（5 月）", importance: 2 },
-  { date: "2026-06-12", country: "JP", name: "日 SQ（先物・オプション特別清算指数）", importance: 1 },
+  { date: "2026-06-12", country: "JP", name: "日 SQ", importance: 1 },
   { date: "2026-06-15", country: "JP", name: "日銀 金融政策決定会合（1 日目）", importance: 3 },
   { date: "2026-06-16", country: "JP", name: "日銀 金融政策決定会合（結果発表）", importance: 3, note: "総裁会見あり" },
   { date: "2026-06-16", country: "US", name: "FOMC（1 日目）", importance: 3 },

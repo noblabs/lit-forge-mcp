@@ -1,0 +1,15 @@
+{
+  "source": "https://www.jpx.co.jp/derivatives/rules/last-trading-day/",
+  "sourceCalendar": "https://www.jpx.co.jp/markets/derivatives/special-quotation/index.html",
+  "lastSyncedAt": "2026-05-15",
+  "scopeStart": "2026-05-01",
+  "scopeEnd": "2026-10-31",
+  "comment": "日本の指数先物・オプション SQ（特別清算指数）算出日。JPX 規則により各限月の第 2 金曜日。2026-06〜10 の各日付を曜日・週次で検算済み（全て金曜・第 2 週）。終日扱いのため publishTime なし。",
+  "events": [
+    { "publishDate": "2026-06-12", "label": "日 SQ", "referenceMonth": "2026-06" },
+    { "publishDate": "2026-07-10", "label": "日 SQ", "referenceMonth": "2026-07" },
+    { "publishDate": "2026-08-14", "label": "日 SQ", "referenceMonth": "2026-08" },
+    { "publishDate": "2026-09-11", "label": "日 SQ", "referenceMonth": "2026-09" },
+    { "publishDate": "2026-10-09", "label": "日 SQ", "referenceMonth": "2026-10" }
+  ]
+}

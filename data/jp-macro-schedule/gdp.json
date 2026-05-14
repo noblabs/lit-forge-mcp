@@ -1,0 +1,22 @@
+{
+  "source": "https://www.esri.cao.go.jp/jp/sna/kouhyou/kouhyou_top.html",
+  "sourceCalendar": "https://www.esri.cao.go.jp/jp/sna/sokuhou/sokuhou_top.html",
+  "lastSyncedAt": "2026-05-15",
+  "scopeStart": "2026-05-01",
+  "scopeEnd": "2026-10-31",
+  "comment": "日本 GDP（内閣府 SNA・四半期別 GDP 速報 QE）の一次速報 公式公表予定。内閣府『公表予定』ページで照合済み。本 JSON は一次速報のみ対象（TS 側も一次速報のみ収録）。時刻は全て 08:50 JST。",
+  "events": [
+    {
+      "publishDate": "2026-05-19",
+      "publishTime": "08:50",
+      "label": "日 GDP 一次速報（1-3 月期）",
+      "referenceQuarter": "2026Q1"
+    },
+    {
+      "publishDate": "2026-08-17",
+      "publishTime": "08:50",
+      "label": "日 GDP 一次速報（4-6 月期）",
+      "referenceQuarter": "2026Q2"
+    }
+  ]
+}
