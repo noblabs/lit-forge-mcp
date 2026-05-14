@@ -27,6 +27,7 @@ import { getDividendHistoryTool } from "./get-dividend-history.js";
 import { getAnalystConsensusTool } from "./get-analyst-consensus.js";
 import { getGeopoliticalCalendarTool } from "./get-geopolitical-calendar.js";
 import { getGeopoliticalPulseTool } from "./get-geopolitical-pulse.js";
+import { getEconomicReleasePulseTool } from "./get-economic-release-pulse.js";
 
 export const tools = [
   simulateNisaTool,
@@ -48,4 +49,6 @@ export const tools = [
   // v0.9.0 新規 / リネーム: 地政学カレンダー（旧 get_geopolitical_events）+ リアルタイム速報
   getGeopoliticalCalendarTool,
   getGeopoliticalPulseTool,
+  // v0.11.0 新規: 経済指標リリース予定の公式機関カレンダー リアルタイム取得（手動キュレーションの網羅性補完）
+  getEconomicReleasePulseTool,
 ];
