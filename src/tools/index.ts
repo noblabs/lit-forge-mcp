@@ -28,6 +28,7 @@ import { getAnalystConsensusTool } from "./get-analyst-consensus.js";
 import { getGeopoliticalCalendarTool } from "./get-geopolitical-calendar.js";
 import { getGeopoliticalPulseTool } from "./get-geopolitical-pulse.js";
 import { getEconomicReleasePulseTool } from "./get-economic-release-pulse.js";
+import { getUsMacroLatestTool } from "./get-us-macro-latest.js";
 
 export const tools = [
   simulateNisaTool,
@@ -51,4 +52,6 @@ export const tools = [
   getGeopoliticalPulseTool,
   // v0.11.0 新規: 経済指標リリース予定の公式機関カレンダー リアルタイム取得（手動キュレーションの網羅性補完）
   getEconomicReleasePulseTool,
+  // v0.13.0 新規: 米マクロ最新値（BLS Public Data API、雇用統計・失業率・CPI・PPI）
+  getUsMacroLatestTool,
 ];

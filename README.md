@@ -10,7 +10,7 @@ Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI �
 
 > **v0.2.0 で「金融・個人投資家特化」にピボット**、**v0.3.0 で「毎朝の市況チェック」系 3 ツールを追加**、**v0.4.0 で銘柄数 9 → 28 に拡大 + 5 つの分析ツール追加**、**v0.6.0 で配当履歴・アナリストコンセンサス・ファンダメンタル指標を追加**、**v0.7.0 で経済イベントに地政学カテゴリ（要人訪問・首脳会談）と複数日イベント（endDate）対応を追加**、**v0.8.0 で地政学イベント専用ツール `get_geopolitical_events` を新設**（首脳会談・国際サミット・主要国選挙・地政学リスクの 4 サブカテゴリを market implications 付きで返す + 一次ソース突合の verify インフラ整備）、**v0.9.0 で地政学ツールを 2 系統に分離・リアルタイム化**: 旧 `get_geopolitical_events` を `get_geopolitical_calendar` にリネーム（用途を確定スケジュール専用に明確化）、新ツール `get_geopolitical_pulse` を追加（BBC World / Al Jazeera / Google News の主要通信社 RSS を集約し、進行中の地政学リスク・突発イベントをリアルタイムで返す）しました。
 
-## 提供ツール（16 種）
+## 提供ツール（17 種）
 
 ### 個人資産形成プランナー（純関数、外部 API 不要）
 
@@ -47,6 +47,12 @@ Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI �
 |---|---|
 | `get_dividend_history` | 個別株・ETF の過去 N 年の配当履歴と暦年合計を取得（`years`: 1/3/5/10、既定 5）。NISA 成長投資枠で配当銘柄を検討する一次情報として使用 |
 | `get_analyst_consensus` | 個別株のアナリスト推奨レーティング（強気買い〜強気売り）・目標株価（平均/高値/安値）・月別推奨内訳を取得。米国株は coverage が厚く、TSE 銘柄や ETF は欠損しやすい |
+
+### 米マクロ最新値（v0.13.0 新規）
+
+| ツール名 | 説明 |
+|---|---|
+| `get_us_macro_latest` | **米マクロ三大指標**（雇用統計・CPI・PPI）+ 失業率の最新発表値と前月比・前年同月比を BLS Public Data API v2 から取得（API key 不要・無認証）。`get_economic_release_pulse` が答える「次にいつ発表されるか」に対し、本ツールは「今の数字はいくつか」を答える |
 
 > ⚠ **HTTP 通信について**: 市況・分析・個別株系ツールは **Yahoo Finance API（query1.finance.yahoo.com / query2.finance.yahoo.com）** へ HTTPS リクエストを送信します。実行 PC のネットワークから外部に出る通信が発生する点にご留意ください。データは約 1 時間遅れの参考値で、**投資助言ではなく情報集約**として提供しています。
 >
@@ -113,7 +119,7 @@ echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":
 {"jsonrpc":"2.0","id":2,"method":"tools/list"}' | node dist/index.js
 ```
 
-`tools/list` のレスポンスに 15 ツールが並べば成功です。
+`tools/list` のレスポンスに 17 ツールが並べば成功です。
 
 ## 使用例
 
