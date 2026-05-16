@@ -22,8 +22,16 @@ import {
 
 const BLS_API_URL = "https://api.bls.gov/publicAPI/v2/timeseries/data/";
 
-// 系列定義（4 系列に固定。JOLTS・実質賃金等は v0.14.0 以降の拡張余地）。
-type IndicatorKey = "nonfarmPayrolls" | "unemploymentRate" | "cpi" | "ppi";
+// 系列定義（v0.14.0 で 4 → 7 系列に拡張: Core CPI / Core PPI / 平均時給を追加）。
+// 全系列を 1 リクエストで取得（BLS API は 1 リクエスト 50 系列まで対応）。
+type IndicatorKey =
+  | "nonfarmPayrolls"
+  | "unemploymentRate"
+  | "cpi"
+  | "ppi"
+  | "coreCpi"
+  | "corePpi"
+  | "averageHourlyEarnings";
 
 type SeriesDef = {
   id: string;
@@ -52,10 +60,28 @@ const SERIES: readonly SeriesDef[] = [
     unit: "index",
   },
   {
+    id: "CUUR0000SA0L1E",
+    key: "coreCpi",
+    displayName: "米 コア CPI（食料・エネルギー除く、1982-84=100）",
+    unit: "index",
+  },
+  {
     id: "WPSFD4",
     key: "ppi",
     displayName: "米 PPI（最終需要、2009=100）",
     unit: "index",
+  },
+  {
+    id: "WPSFD49104",
+    key: "corePpi",
+    displayName: "米 コア PPI（最終需要、食料・エネルギー除く、2009=100）",
+    unit: "index",
+  },
+  {
+    id: "CES0500000003",
+    key: "averageHourlyEarnings",
+    displayName: "米 平均時給（民間部門、季調済）",
+    unit: "USD/hour",
   },
 ];
 

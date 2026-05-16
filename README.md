@@ -52,7 +52,7 @@ Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI �
 
 | ツール名 | 説明 |
 |---|---|
-| `get_us_macro_latest` | **米マクロ三大指標**（雇用統計・CPI・PPI）+ 失業率の最新発表値と前月比・前年同月比を BLS Public Data API v2 から取得（API key 不要・無認証）。`get_economic_release_pulse` が答える「次にいつ発表されるか」に対し、本ツールは「今の数字はいくつか」を答える |
+| `get_us_macro_latest` | **米マクロ三大指標**（雇用統計・CPI・PPI）+ コア CPI・コア PPI（食料・エネルギー除く）+ 失業率 + 平均時給の最新発表値と前月比・前年同月比を BLS Public Data API v2 から取得（API key 不要・無認証、7 系列を 1 リクエスト）。`get_economic_release_pulse` が答える「次にいつ発表されるか」に対し、本ツールは「今の数字はいくつか」を答える |
 
 > ⚠ **HTTP 通信について**: 市況・分析・個別株系ツールは **Yahoo Finance API（query1.finance.yahoo.com / query2.finance.yahoo.com）** へ HTTPS リクエストを送信します。実行 PC のネットワークから外部に出る通信が発生する点にご留意ください。データは約 1 時間遅れの参考値で、**投資助言ではなく情報集約**として提供しています。
 >
