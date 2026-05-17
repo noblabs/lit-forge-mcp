@@ -10,6 +10,13 @@
 // v0.8.0 で地政学イベント専用ツール get_geopolitical_events を追加（首脳会談・サミット・選挙・地政学リスクの 4 サブカテゴリ）。
 // v0.9.0 で地政学ツールを 2 系統に分離: get_geopolitical_calendar（確定スケジュール、旧 events からリネーム）+ get_geopolitical_pulse（リアルタイム速報、RSS アグリゲーション）。
 // 設計詳細は docs/geopolitical-realtime.md 参照。
+// v0.11.0 で get_economic_release_pulse を新設（BEA / 内閣府 / 日銀の 3 公式機関のリリース予定を実取得）。
+// v0.12.0 で get_economic_release_pulse に NY 連銀 / FRB アダプタを追加（5 公式機関）。
+// v0.13.0 で get_us_macro_latest を新設（BLS Public Data API v2 から雇用統計・失業率・CPI・PPI の 4 系列を取得）。BLS の HTML スケジュールは bot 403 で「発表予定」自動取得は断念し「最新値」取得に方針転換。
+// v0.14.0 で White House OMB/OIRA の PFEI Schedule PDF を統合し BLS 三大指標の「発表予定」も自動取得対応（6 公式機関に）。同時に get_us_macro_latest を 4 → 7 系列に拡張（コア CPI / コア PPI / 平均時給を追加）。
+// v0.14.1 で README / package.json keywords を 4 本柱（資産形成 + 市況 + 経済指標 + 地政学）に全面刷新、18 ツール表記に統一。
+// v0.14.2 で description / keywords の追加整合。
+// v0.14.3 で src/index.ts の version ハードコード撤廃 → package.json から動的読み込みに変更（以降の bump で自動同期）。server.json 側は手動同期。
 
 import { simulateNisaTool } from "./simulate-nisa.js";
 import { planRetirementTool } from "./plan-retirement.js";
@@ -52,6 +59,6 @@ export const tools = [
   getGeopoliticalPulseTool,
   // v0.11.0 新規: 経済指標リリース予定の公式機関カレンダー リアルタイム取得（手動キュレーションの網羅性補完）
   getEconomicReleasePulseTool,
-  // v0.13.0 新規: 米マクロ最新値（BLS Public Data API、雇用統計・失業率・CPI・PPI）
+  // v0.13.0 新規・v0.14.0 で 4→7 系列拡張: 米マクロ最新値（BLS Public Data API v2、雇用統計・失業率・CPI・コア CPI・PPI・コア PPI・平均時給）
   getUsMacroLatestTool,
 ];

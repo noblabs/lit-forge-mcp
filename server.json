@@ -1,17 +1,17 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.noblabs/lit-forge-mcp",
-  "description": "Personal asset planning + market data + analysts + geopolitical calendar/pulse. 16 tools.",
+  "description": "Personal asset planning, market snapshot, economic releases, US macro, geopolitical. 18 tools.",
   "repository": {
     "url": "https://github.com/noblabs/lit-forge-mcp",
     "source": "github"
   },
-  "version": "0.9.0",
+  "version": "0.14.3",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "lit-forge-mcp",
-      "version": "0.9.0",
+      "version": "0.14.3",
       "transport": {
         "type": "stdio"
       }

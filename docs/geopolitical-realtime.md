@@ -1,5 +1,7 @@
 # 地政学イベント・リアルタイム化設計（v0.9.0）
 
+> **※ 本書は v0.9.0 当時の設計記録です。以降の到達点（PFEI 統合・米マクロ最新値・経済指標リリース pulse の 6 公式機関化など）はリポジトリ README / package.json を一次ソースとしてください。本ファイル末尾の「将来拡張」セクションも参照。**
+
 ## 背景
 
 v0.8.0 の `get_geopolitical_events` は手動キュレーション JSON（半年に 1 回 PR で更新）を返す設計だった。
@@ -90,7 +92,16 @@ get_geopolitical_pulse({topic, maxItems})  ─────┼──→│ Google
 - **dedupe**: タイトルを小文字化 + 記号除去 + 先頭 60 文字でハッシュ比較
 - **エラー透過**: 個別フィード失敗は`sources` 配列に `error` フィールドで返す（呼び出し側で部分結果を判断可能）
 
-## 将来拡張（v0.10.0+）
+## v0.10.0 以降の到達点（実装済）
+
+地政学とは別系統だが「経済イベント・カレンダー」全体の拡張は次のとおり進行した。地政学側 (`get_geopolitical_calendar` / `get_geopolitical_pulse`) は v0.9.0 設計のまま運用継続中。
+
+- **v0.11.0**: 新ツール `get_economic_release_pulse` 追加。BEA / 内閣府 / 日銀の **3 アダプタ** で公式機関カレンダーの実取得を開始
+- **v0.12.0**: `get_economic_release_pulse` に NY 連銀 / FRB アダプタ追加（**5 公式機関**）
+- **v0.13.0**: 新ツール `get_us_macro_latest` 追加。BLS Public Data API v2 で「最新値」を 4 系列取得。BLS の HTML schedule は bot 403 で「発表予定」自動取得は断念し最新値ルートに方針転換
+- **v0.14.0**: White House OMB/OIRA の **PFEI (Principal Federal Economic Indicators) Schedule PDF** を build 時に取り込み、BLS 三大指標（雇用統計・CPI・PPI）の発表予定も `get_economic_release_pulse` で返るように（**6 公式機関**）。`get_us_macro_latest` も 4 → 7 系列へ拡張（コア CPI / コア PPI / 平均時給追加）
+
+## 将来拡張（未実装）
 
 - GDELT Events CSV 統合（GoldsteinScale / NumMentions による重要度自動スコアリング）
 - 日本語ソース追加（共同通信・時事通信 RSS が利用可能か検証）

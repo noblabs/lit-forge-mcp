@@ -156,9 +156,45 @@ npm run verify:geopolitical # 地政学イベントを公式日程 JSON と突�
 npm run verify:all         # 上記 3 つを連続実行
 ```
 
+## PFEI スケジュール更新（年初・改訂時）
+
+`get_economic_release_pulse` の BLS アダプタは White House OMB/OIRA の [PFEI Schedule PDF](https://www.whitehouse.gov/wp-content/uploads/2025/09/pfei_schedule_release_dates_cy2026.pdf) を build 時に取り込んでいます。**年初（1 月初旬）** または **PFEI 改訂アナウンス時** に以下を実行してください:
+
+```bash
+npm run update:pfei   # = build + scripts/update-pfei-schedule.mjs
+```
+
+`src/lib/pfei-schedule-data.ts` が再生成されます。diff を確認のうえ `npm run verify:all` が exit 0 で通ることを確認して commit。ローカルに `pdftotext` (poppler-utils) が必要です。
+
+MCP サーバ自体はランタイムで PDF を取りに行かないので、bot ブロックの影響を受けません。
+
 ## リリース
 
 ```bash
-npm version patch  # patch リリース
-npm publish
+# 1. version bump（patch / minor / major のどれか）
+npm version patch              # package.json の version を更新
+
+# 2. server.json の手動同期（mcp-publisher が読む。動的化できない）
+#    server.json の "version" と "packages[0].version" を package.json と同じ値に揃える
+
+# 3. ビルド + 全検証（prepublishOnly でも実行されるが事前確認推奨）
+npm run build
+npx vitest run
+npm run verify:all
+
+# 4. npm publish（2FA OTP 必須）
+npm publish --otp=XXXXXX       # XXXXXX は Authenticator から取得した 6 桁
+
+# 5. 公式 MCP Registry への publish（対話 TTY 必須）
+~/.local/bin/mcp-publisher login github   # 初回 or トークン expire 時のみ
+~/.local/bin/mcp-publisher publish
+
+# 6. commit & push
+git push origin main
 ```
+
+注意点:
+- `package.json.mcpName` (`io.github.noblabs/lit-forge-mcp`) と `server.json.name` は完全一致必須
+- `server.json.description` は **100 文字以下** に収める
+- `src/index.ts` の `serverInfo.version` は package.json から動的読み込みなので bump 後に自動同期される（v0.14.3 以降）。`server.json` のみ手動同期
+- npm OTP が expire した場合は `npm logout && npm login` で再ログイン

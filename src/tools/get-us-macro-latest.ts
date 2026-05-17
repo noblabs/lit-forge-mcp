@@ -1,12 +1,13 @@
-// 米マクロ最新値取得ツール（v0.13.0 新設）。
-// 雇用統計・失業率・CPI・PPI の最新発表値 + 前月比 + 前年同月比 を BLS Public Data API v2
-// から取得する。
+// 米マクロ最新値取得ツール（v0.13.0 新設・v0.14.0 で 4→7 系列拡張）。
+// 雇用統計・失業率・CPI・コア CPI・PPI・コア PPI・平均時給 の最新発表値 + 前月比 + 前年同月比
+// を BLS Public Data API v2 から 1 リクエストで取得する。
 //
 // 設計背景:
 //   - 当初は get_economic_release_pulse に BLS アダプタを追加して「発表予定日」を網羅する
 //     計画だったが、BLS の HTML schedule ページと RSS は Akamai bot 管理で 403 が返り取得不能。
 //   - 代替路として Public Data API v2 が無認証で動くことを実証し、本ツールでは「最新値」の
-//     取得を実装することにした（発表予定は手動キュレ JSON で従来通り）。
+//     取得を実装することにした。発表予定の方は v0.14.0 で White House OMB/OIRA の
+//     PFEI Schedule PDF を get_economic_release_pulse に統合する形で別系統で解決。
 //   - 本ツールは get_market_snapshot（市況値）のマクロ指標版という位置づけ。
 
 import { fetchUsMacroLatest } from "../lib/us-macro-latest.js";
