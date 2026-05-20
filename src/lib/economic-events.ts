@@ -10,7 +10,7 @@
 
 import type { EconomicEvent, EventCategory } from "./market-types.js";
 
-export const LAST_UPDATED = "2026-05-15";
+export const LAST_UPDATED = "2026-05-20";
 
 export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   // ============ 2026 年 5 月 ============
@@ -25,6 +25,7 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-05-13", time: "21:30", country: "US", name: "米 PPI（4 月）", importance: 2 },
   { date: "2026-05-14", time: "21:30", country: "US", name: "米 小売売上高（4 月）", importance: 2 },
   { date: "2026-05-19", time: "08:50", country: "JP", name: "日 GDP 一次速報（1-3 月期）", importance: 3 },
+  { date: "2026-05-20", time: "27:00", country: "US", name: "FOMC 議事要旨（4 月会合分）", importance: 3, note: "4 月 28-29 日会合分。公表は会合の約 3 週間後（米時間水曜 14:00 ET = JST 翌 03:00）" },
   { date: "2026-05-22", time: "08:30", country: "JP", name: "日 CPI（4 月）", importance: 2 },
   { date: "2026-05-28", time: "21:30", country: "US", name: "米 PCE 価格指数（4 月）", importance: 3, note: "FRB が重視するインフレ指標" },
 
@@ -50,6 +51,7 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-07-03", time: "23:00", country: "US", name: "米 ISM 非製造業 PMI（6 月）", importance: 2 },
   { date: "2026-07-03", country: "US", name: "米 独立記念日 振替休場（7/4 土曜のため 7/3 金曜が休場）", importance: 1 },
   { date: "2026-07-02", time: "21:30", country: "US", name: "米 雇用統計（6 月）", importance: 3, note: "独立記念日 7/4 のため通常の金曜から木曜へ前倒し発表" },
+  { date: "2026-07-08", time: "27:00", country: "US", name: "FOMC 議事要旨（6 月会合分）", importance: 3, note: "6 月 16-17 日会合分。Fed は公開日を事前告知しないため予定（会合の約 3 週間後ルールに基づく計算値）。実公開後に確定" },
   { date: "2026-07-10", country: "JP", name: "日 SQ", importance: 1 },
   { date: "2026-07-14", time: "21:30", country: "US", name: "米 CPI（6 月）", importance: 3 },
   { date: "2026-07-15", time: "11:00", country: "CN", name: "中国 GDP（4-6 月期）", importance: 3 },
@@ -72,6 +74,7 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-08-14", time: "21:30", country: "US", name: "米 小売売上高（7 月）", importance: 2 },
   { date: "2026-08-14", country: "JP", name: "日 SQ", importance: 1 },
   { date: "2026-08-17", time: "08:50", country: "JP", name: "日 GDP 一次速報（4-6 月期）", importance: 3 },
+  { date: "2026-08-19", time: "27:00", country: "US", name: "FOMC 議事要旨（7 月会合分）", importance: 3, note: "7 月 28-29 日会合分。Fed は公開日を事前告知しないため予定（会合の約 3 週間後ルールに基づく計算値）。実公開後に確定" },
   { date: "2026-08-21", time: "08:30", country: "JP", name: "日 CPI（7 月）", importance: 2 },
   { date: "2026-08-27", endDate: "2026-08-29", country: "US", name: "ジャクソンホール会議（〜29）", importance: 3, category: "macro", note: "FRB 議長講演に注目。FRB 主催の経済政策シンポジウムでありマクロ寄りのため category: macro" },
   { date: "2026-08-26", time: "21:30", country: "US", name: "米 PCE 価格指数（7 月）", importance: 3 },
@@ -97,6 +100,7 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-10-01", time: "23:00", country: "US", name: "米 ISM 製造業 PMI（9 月）", importance: 3 },
   { date: "2026-10-02", time: "23:00", country: "US", name: "米 ISM 非製造業 PMI（9 月）", importance: 2 },
   { date: "2026-10-02", time: "21:30", country: "US", name: "米 雇用統計（9 月）", importance: 3 },
+  { date: "2026-10-07", time: "27:00", country: "US", name: "FOMC 議事要旨（9 月会合分）", importance: 3, note: "9 月 15-16 日会合分。Fed は公開日を事前告知しないため予定（会合の約 3 週間後ルールに基づく計算値）。実公開後に確定" },
   { date: "2026-10-09", country: "JP", name: "日 SQ", importance: 1 },
   { date: "2026-10-14", time: "21:30", country: "US", name: "米 CPI（9 月）", importance: 3 },
   { date: "2026-10-15", time: "21:30", country: "US", name: "米 PPI（9 月）", importance: 2 },

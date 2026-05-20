@@ -6,12 +6,12 @@
     "url": "https://github.com/noblabs/lit-forge-mcp",
     "source": "github"
   },
-  "version": "0.14.3",
+  "version": "0.14.4",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "lit-forge-mcp",
-      "version": "0.14.3",
+      "version": "0.14.4",
       "transport": {
         "type": "stdio"
       }

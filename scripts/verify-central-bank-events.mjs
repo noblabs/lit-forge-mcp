@@ -12,6 +12,7 @@
 //   - TS ⊆ JSON（TS の中銀エントリは全て JSON にあること）→ 違反は exit 1
 //   - JSON 側に余剰がある場合は警告のみ（網羅性は別途半年更新時にフォロー）
 //   - lastSyncedAt が 180 日超なら警告のみ
+//   - tentative=true のエントリが予定日を過ぎたまま残っていたら警告のみ（実公開日の確定更新を促す）
 //
 // 前提: `npm run build` が完了し dist/lib/economic-events.js が存在すること。
 
@@ -32,6 +33,9 @@ const SOURCES = [
 const CENTRAL_BANK_KEYWORDS = ["日銀", "FOMC", "FRB 議長", "ECB"];
 
 const FRESHNESS_WARN_DAYS = 180;
+
+// tentative（予定）エントリが予定日を過ぎてからこの日数を超えると警告する猶予。
+const TENTATIVE_GRACE_DAYS = 3;
 
 function loadJson(relPath) {
   const fullPath = join(REPO_ROOT, relPath);
@@ -93,6 +97,14 @@ async function main() {
     for (const ev of data.events) {
       jsonKeys.add(makeKey(ev.publishDate, ev.publishTime, ev.label));
       jsonTotal++;
+      // tentative エントリ（FOMC 議事要旨など Fed 未告知の計算値）の期限切れ警告。
+      // 予定日 publishDate を TENTATIVE_GRACE_DAYS 超で過ぎても tentative のままなら、
+      // 実公開日が確定しているはずなので公式裏取り + tentative 解除を促す。
+      if (ev.tentative === true && daysSince(ev.publishDate) > TENTATIVE_GRACE_DAYS) {
+        console.warn(
+          `[WARN] ${src.name} の tentative エントリ「${ev.label}」(予定 ${ev.publishDate}) が ${daysSince(ev.publishDate)} 日前を過ぎています。Fed 公式で実公開日を確認し、確定値に更新して tentative を外してください。`,
+        );
+      }
     }
   }
 

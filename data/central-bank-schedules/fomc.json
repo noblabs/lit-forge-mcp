@@ -1,10 +1,17 @@
 {
   "source": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
-  "lastSyncedAt": "2026-05-11",
+  "lastSyncedAt": "2026-05-20",
   "scopeStart": "2026-05-11",
   "scopeEnd": "2026-10-31",
-  "comment": "FOMC 2026 年の会合日程を Fed 公式 calendar から手転記。time の '27:00' は JST 翌日 03:00 表記（米時間水曜午後）。label は ECONOMIC_EVENTS の name と完全一致させる。",
+  "comment": "FOMC 2026 年の会合日程を Fed 公式 calendar から手転記。type は meeting=会合 / press=議長会見 / minutes=議事要旨。time の '27:00' は JST 翌日 03:00 表記（米時間水曜午後）。label は ECONOMIC_EVENTS の name と完全一致させる。tentative=true は議事要旨の予定（Fed は公開日を事前告知しないため、会合の約 3 週間後の水曜 14:00 ET ルールに基づく計算値）。実公開後に Fed 公式で裏取りし tentative を外して確定値に更新する。",
   "events": [
+    {
+      "publishDate": "2026-05-20",
+      "publishTime": "27:00",
+      "type": "minutes",
+      "label": "FOMC 議事要旨（4 月会合分）",
+      "relatedMeeting": "2026-04-28/29"
+    },
     {
       "publishDate": "2026-06-16",
       "type": "meeting",
@@ -27,6 +34,14 @@
       "relatedMeeting": "2026-06-16/17"
     },
     {
+      "publishDate": "2026-07-08",
+      "publishTime": "27:00",
+      "type": "minutes",
+      "label": "FOMC 議事要旨（6 月会合分）",
+      "relatedMeeting": "2026-06-16/17",
+      "tentative": true
+    },
+    {
       "publishDate": "2026-07-28",
       "type": "meeting",
       "label": "FOMC（1 日目）",
@@ -38,6 +53,14 @@
       "type": "meeting",
       "label": "FOMC 結果発表",
       "relatedMeeting": "2026-07-28/29"
+    },
+    {
+      "publishDate": "2026-08-19",
+      "publishTime": "27:00",
+      "type": "minutes",
+      "label": "FOMC 議事要旨（7 月会合分）",
+      "relatedMeeting": "2026-07-28/29",
+      "tentative": true
     },
     {
       "publishDate": "2026-09-15",
@@ -52,6 +75,14 @@
       "label": "FOMC 結果発表 + 経済予測",
       "relatedMeeting": "2026-09-15/16",
       "comment": "ドットチャート更新月"
+    },
+    {
+      "publishDate": "2026-10-07",
+      "publishTime": "27:00",
+      "type": "minutes",
+      "label": "FOMC 議事要旨（9 月会合分）",
+      "relatedMeeting": "2026-09-15/16",
+      "tentative": true
     },
     {
       "publishDate": "2026-10-27",
