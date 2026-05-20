@@ -15,6 +15,8 @@ import { bojAdapter } from "./adapters/boj.js";
 import { nyfedAdapter } from "./adapters/nyfed.js";
 import { frbAdapter } from "./adapters/frb.js";
 import { pfeiAdapter } from "./adapters/pfei.js";
+import { dolEtaAdapter } from "./adapters/dol-eta.js";
+import { spGlobalPmiAdapter } from "./adapters/sp-global-pmi.js";
 
 // 登録アダプタ。新ソース追加時はここに 1 行足す。
 // 次サイクル候補: 総務省統計局（日 CPI）、FOMC。
@@ -25,6 +27,8 @@ const ADAPTERS: readonly ReleaseAdapter[] = [
   nyfedAdapter,
   frbAdapter,
   pfeiAdapter,
+  dolEtaAdapter,
+  spGlobalPmiAdapter,
 ];
 
 export type ReleaseRange = "today" | "week";

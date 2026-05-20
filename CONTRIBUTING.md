@@ -79,6 +79,19 @@
 | 2026-05-11 | 日銀「議事要旨」を 5/11 (月) に登録 → 実際は 5/12 (火) の「主な意見」（4 月会合分） | 種別取り違え（議事要旨/主な意見）＋ 日付ズレ。前回事故 (5/9 土) の再発で、平日に置いたため土日チェックが素通り | `data/central-bank-schedules/*.json` を一次ソース化 + `verify-central-bank-events.mjs` で TS ⊆ JSON を検証（vitest 統合） |
 | 2026-05-12 | 米 CPI（4 月）を 5/13 (水) に登録 → 実際は 5/12 (火)。同類のズレが PPI / PCE / 小売売上高 / GDP 速報で計 13 件連鎖（CPI 6 月・9 月、PPI 6 月・9 月、PCE 4-9 月全件、小売 4 月・6 月、GDP 7-9 月速報）。PPI 8 月分は丸ごと欠落 | 公式スケジュール未照合のまま 6 ヶ月分一括登録（Web 検索結果から人力転記）。曜日固定ルールがある雇用統計・PCE 旧仕様では vitest が捕捉できなかった日付ズレが、PCE 旧「金曜固定」テストでも 5/29(金)→5/28(木) など曜日が偶然一致するケースで素通り | `data/us-macro-schedule/{cpi,ppi,employment,retail-sales,pce,gdp}.json` を [PFEI 2026 年版 PDF](https://www.whitehouse.gov/wp-content/uploads/2025/09/pfei_schedule_release_dates_cy2026.pdf) から一次ソース化 + `verify-us-macro-events.mjs` で TS ⊆ JSON を検証（vitest 統合）。PCE 「金曜固定」テストは BEA 実態（曜日固定でない）に合わせ「平日のみ」に緩和し、厳密検証は JSON 突合に一本化 |
 
+### get_economic_release_pulse 専用の静的データ（v0.15.0〜）
+
+`get_economic_release_pulse` のうち、ライブ取得しない 2 アダプタは **`ECONOMIC_EVENTS` とは別系統**の静的データを持ち、こちらも半年に 1 回見直してください（民間サイト/官公庁 PDF のスクレイピング回避のため手転記運用）。検証は `economic-release-pulse.test.ts` の純関数テストが担います（verify:* は ECONOMIC_EVENTS 用なので対象外）。
+
+- **S&P Global 米 PMI 速報** (`src/lib/sp-global-pmi-schedule-data.ts`): [S&P Global PMI 公式リリースカレンダー](https://www.pmi.spglobal.com/) から flash 発表日（製造業・サービス業 同日 09:45 ET）を手転記。確認できた月のみ `confirmed: true`、`lastSyncedAt` を当日に。⚠️ 未確認の将来日付は捏造しない（空でよい）。
+- **DOL/ETA 新規失業保険申請件数** (`src/lib/economic-release-pulse/adapters/dol-eta.ts`): 通常は毎週木曜 08:30 ET を計算生成。木曜が連邦祝日に当たる週（感謝祭等）だけ `JOBLESS_CLAIMS_OVERRIDES` に補正を追記。[DOL UI Weekly Claims](https://oui.doleta.gov/unemploy/claims.asp) の年間日程で要確認。
+
+```
+- [ ] sp-global-pmi-schedule-data.ts の flashReleases を S&P Global 公式カレンダーから更新し lastSyncedAt を当日に（確認分のみ confirmed:true）
+- [ ] dol-eta.ts の JOBLESS_CLAIMS_OVERRIDES を DOL 公式日程の祝日シフトと照合
+- [ ] npx vitest run（economic-release-pulse.test.ts）が pass
+```
+
 ## 地政学イベントカレンダーの更新ルール
 
 `src/lib/geopolitical-events.ts` の `GEOPOLITICAL_EVENTS` は v0.8.0 で新設。経済イベントと同じく **半年に 1 回手動更新** する設計です。

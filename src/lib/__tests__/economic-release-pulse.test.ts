@@ -9,6 +9,8 @@ import {
 } from "../economic-release-pulse/adapters/cao.js";
 import { parseEmpireStateTable } from "../economic-release-pulse/adapters/nyfed.js";
 import { parseG17Releases } from "../economic-release-pulse/adapters/frb.js";
+import { computeJoblessClaimsReleases } from "../economic-release-pulse/adapters/dol-eta.js";
+import { spGlobalPmiToReleaseEvents } from "../economic-release-pulse/adapters/sp-global-pmi.js";
 import {
   jstParts,
   jstToday,
@@ -225,5 +227,69 @@ and December&nbsp;16.
 
   it("該当する年ブロックが無ければ空配列", () => {
     expect(parseG17Releases("<p>no schedule here</p>")).toEqual([]);
+  });
+});
+
+describe("computeJoblessClaimsReleases", () => {
+  it("通常週は木曜 08:30 ET を JST に変換して返す（DST 期間 → 21:30 同日）", () => {
+    // 2026-05-21 は木曜（Memorial Day 前週で祝日補正なし）。
+    const events = computeJoblessClaimsReleases("2026-05-18", "2026-05-24");
+    expect(events).toEqual([
+      {
+        date: "2026-05-21",
+        time: "21:30",
+        country: "US",
+        name: "米 新規失業保険申請件数",
+        source: "DOL/ETA",
+        sourceUrl: "https://www.dol.gov/ui/data.pdf",
+      },
+    ]);
+  });
+
+  it("標準時（冬）は +14h で 22:30 JST 同日になる", () => {
+    // 2026-01-08 は木曜（標準時期間）。
+    const events = computeJoblessClaimsReleases("2026-01-05", "2026-01-11");
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ date: "2026-01-08", time: "22:30" });
+  });
+
+  it("月内の全木曜を返す", () => {
+    // 2026-05 の木曜: 7 / 14 / 21 / 28。
+    const events = computeJoblessClaimsReleases("2026-05-01", "2026-05-31");
+    expect(events.map((e) => e.date)).toEqual([
+      "2026-05-07",
+      "2026-05-14",
+      "2026-05-21",
+      "2026-05-28",
+    ]);
+  });
+
+  it("感謝祭週は祝日オーバーライドで前日水曜に前倒しされる", () => {
+    // 2026-11-26（木・感謝祭）→ 2026-11-25（水）。標準時のため 22:30 JST。
+    const events = computeJoblessClaimsReleases("2026-11-23", "2026-11-29");
+    expect(events).toHaveLength(1);
+    expect(events[0]).toMatchObject({ date: "2026-11-25", time: "22:30" });
+  });
+});
+
+describe("spGlobalPmiToReleaseEvents", () => {
+  it("flash 発表日を製造業速報・サービス業速報の 2 件に展開する（09:45 ET → 22:45 JST 同日）", () => {
+    const events = spGlobalPmiToReleaseEvents();
+    // 確認済みの 2026-05-21 分（製造業 + サービス業）を検証。
+    const may21 = events.filter((e) => e.date === "2026-05-21");
+    expect(may21).toHaveLength(2);
+    expect(may21.map((e) => e.name).sort()).toEqual([
+      "米 サービス業PMI（速報）",
+      "米 製造業PMI（速報）",
+    ]);
+    for (const e of may21) {
+      expect(e).toMatchObject({
+        date: "2026-05-21",
+        time: "22:45",
+        country: "US",
+        source: "S&P Global",
+        sourceUrl: "https://www.pmi.spglobal.com/",
+      });
+    }
   });
 });

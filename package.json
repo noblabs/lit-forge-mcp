@@ -1,8 +1,8 @@
 {
   "name": "lit-forge-mcp",
-  "version": "0.14.4",
+  "version": "0.15.0",
   "mcpName": "io.github.noblabs/lit-forge-mcp",
-  "description": "MCP server (18 tools): NISA/iDeCo/retirement simulation, 28-indicator market snapshot, economic release calendars (BEA/NY Fed/FRB/BLS/Cabinet Office/BOJ), latest BLS macro values (7 series), and geopolitical calendar + pulse.",
+  "description": "MCP server (18 tools): NISA/iDeCo/retirement simulation, 28-indicator market snapshot, economic release calendars (BEA/NY Fed/FRB/BLS/DOL-ETA/S&P Global/Cabinet Office/BOJ), latest BLS macro values (7 series), and geopolitical calendar + pulse.",
   "type": "module",
   "license": "MIT",
   "homepage": "https://github.com/noblabs/lit-forge-mcp",
