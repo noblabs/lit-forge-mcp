@@ -10,7 +10,7 @@
 
 import type { EconomicEvent, EventCategory } from "./market-types.js";
 
-export const LAST_UPDATED = "2026-05-20";
+export const LAST_UPDATED = "2026-05-26";
 
 export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   // ============ 2026 年 5 月 ============
@@ -28,6 +28,12 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-05-20", time: "27:00", country: "US", name: "FOMC 議事要旨（4 月会合分）", importance: 3, note: "4 月 28-29 日会合分。公表は会合の約 3 週間後（米時間水曜 14:00 ET = JST 翌 03:00）" },
   { date: "2026-05-22", time: "08:30", country: "JP", name: "日 CPI（4 月）", importance: 2 },
   { date: "2026-05-28", time: "21:30", country: "US", name: "米 PCE 価格指数（4 月）", importance: 3, note: "FRB が重視するインフレ指標" },
+  // -- 米 消費者信頼感系。出典は手動キュレーション（PFEI 非掲載のため verify:us-macro 対象外。ISM と同じ扱い）。
+  //    CB 版: Conference Board 公式（毎月最終火曜 10:00 ET = 23:00 JST）。
+  //    ミシガン大: data.sca.isr.umich.edu（速報=第 2 金曜 / 確報=第 4 金曜、いずれも 10:00 ET = 23:00 JST）。reference month は当月。
+  { date: "2026-05-08", time: "23:00", country: "US", name: "米 ミシガン大消費者態度指数・速報（5 月）", importance: 2, note: "速報値。確報で改定される" },
+  { date: "2026-05-22", time: "23:00", country: "US", name: "米 ミシガン大消費者態度指数・確報（5 月）", importance: 1, note: "確報値。期待インフレ率も注目" },
+  { date: "2026-05-26", time: "23:00", country: "US", name: "米 CB消費者信頼感指数（5 月）", importance: 2, note: "Conference Board。雇用是非 DI（労働市場の景況感）も注目" },
 
   // ============ 2026 年 6 月 ============
   { date: "2026-06-01", time: "10:30", country: "CN", name: "中国 製造業 PMI（5 月）", importance: 2 },
@@ -43,6 +49,10 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-06-17", time: "27:00", country: "US", name: "FOMC 結果発表 + 経済予測", importance: 3, note: "ドットチャート更新月" },
   { date: "2026-06-17", time: "27:30", country: "US", name: "FRB 議長記者会見", importance: 3 },
   { date: "2026-06-25", time: "21:30", country: "US", name: "米 PCE 価格指数（5 月）", importance: 3 },
+  // -- 米 消費者信頼感系
+  { date: "2026-06-12", time: "23:00", country: "US", name: "米 ミシガン大消費者態度指数・速報（6 月）", importance: 2 },
+  { date: "2026-06-26", time: "23:00", country: "US", name: "米 ミシガン大消費者態度指数・確報（6 月）", importance: 1 },
+  { date: "2026-06-30", time: "23:00", country: "US", name: "米 CB消費者信頼感指数（6 月）", importance: 2 },
 
   // ============ 2026 年 7 月 ============
   { date: "2026-07-01", time: "10:30", country: "CN", name: "中国 製造業 PMI（6 月）", importance: 2 },
@@ -63,6 +73,10 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-07-29", time: "27:00", country: "US", name: "FOMC 結果発表", importance: 3 },
   { date: "2026-07-30", time: "21:30", country: "US", name: "米 GDP 速報値（4-6 月期）", importance: 3 },
   { date: "2026-07-30", time: "21:30", country: "US", name: "米 PCE 価格指数（6 月）", importance: 3 },
+  // -- 米 消費者信頼感系
+  { date: "2026-07-10", time: "23:00", country: "US", name: "米 ミシガン大消費者態度指数・速報（7 月）", importance: 2 },
+  { date: "2026-07-24", time: "23:00", country: "US", name: "米 ミシガン大消費者態度指数・確報（7 月）", importance: 1 },
+  { date: "2026-07-28", time: "23:00", country: "US", name: "米 CB消費者信頼感指数（7 月）", importance: 2 },
 
   // ============ 2026 年 8 月 ============
   { date: "2026-07-31", time: "10:30", country: "CN", name: "中国 製造業 PMI（7 月）", importance: 2 },
@@ -78,6 +92,10 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-08-21", time: "08:30", country: "JP", name: "日 CPI（7 月）", importance: 2 },
   { date: "2026-08-27", endDate: "2026-08-29", country: "US", name: "ジャクソンホール会議（〜29）", importance: 3, category: "macro", note: "FRB 議長講演に注目。FRB 主催の経済政策シンポジウムでありマクロ寄りのため category: macro" },
   { date: "2026-08-26", time: "21:30", country: "US", name: "米 PCE 価格指数（7 月）", importance: 3 },
+  // -- 米 消費者信頼感系
+  { date: "2026-08-14", time: "23:00", country: "US", name: "米 ミシガン大消費者態度指数・速報（8 月）", importance: 2 },
+  { date: "2026-08-25", time: "23:00", country: "US", name: "米 CB消費者信頼感指数（8 月）", importance: 2 },
+  { date: "2026-08-28", time: "23:00", country: "US", name: "米 ミシガン大消費者態度指数・確報（8 月）", importance: 1 },
 
   // ============ 2026 年 9 月 ============
   { date: "2026-09-01", time: "10:30", country: "CN", name: "中国 製造業 PMI（8 月）", importance: 2 },
@@ -93,6 +111,10 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-09-18", country: "JP", name: "日銀 金融政策決定会合（結果発表）", importance: 3, note: "総裁会見あり" },
   { date: "2026-09-25", time: "08:30", country: "JP", name: "日 CPI（8 月）", importance: 2 },
   { date: "2026-09-30", time: "21:30", country: "US", name: "米 PCE 価格指数（8 月）", importance: 3 },
+  // -- 米 消費者信頼感系
+  { date: "2026-09-11", time: "23:00", country: "US", name: "米 ミシガン大消費者態度指数・速報（9 月）", importance: 2 },
+  { date: "2026-09-25", time: "23:00", country: "US", name: "米 ミシガン大消費者態度指数・確報（9 月）", importance: 1 },
+  { date: "2026-09-29", time: "23:00", country: "US", name: "米 CB消費者信頼感指数（9 月）", importance: 2 },
 
   // ============ 2026 年 10 月 ============
   { date: "2026-10-01", time: "08:50", country: "JP", name: "日銀短観（7-9 月期）", importance: 3 },
@@ -111,6 +133,10 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-10-30", country: "JP", name: "日銀 金融政策決定会合（結果 + 展望レポート）", importance: 3, note: "総裁会見あり" },
   { date: "2026-10-29", time: "21:30", country: "US", name: "米 GDP 速報値（7-9 月期）", importance: 3 },
   { date: "2026-10-29", time: "21:30", country: "US", name: "米 PCE 価格指数（9 月）", importance: 3 },
+  // -- 米 消費者信頼感系
+  { date: "2026-10-09", time: "23:00", country: "US", name: "米 ミシガン大消費者態度指数・速報（10 月）", importance: 2 },
+  { date: "2026-10-23", time: "23:00", country: "US", name: "米 ミシガン大消費者態度指数・確報（10 月）", importance: 1 },
+  { date: "2026-10-27", time: "23:00", country: "US", name: "米 CB消費者信頼感指数（10 月）", importance: 2 },
 ];
 
 // JST の年月日を yyyy-mm-dd 形式で返す（leaderboard/keys.ts と同一ロジック）。
