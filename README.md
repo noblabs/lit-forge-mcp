@@ -8,7 +8,9 @@
 
 Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI クライアントで動作します。
 
-> **最新版ハイライト（v0.16.0）**: `get_economic_events_today`（手動キュレーション経済カレンダー）に **米 消費者信頼感指数**（Conference Board・毎月最終火曜）と **ミシガン大消費者態度指数**（速報=第 2 金曜 / 確報=第 4 金曜）を追加。為替で注目度の高い米消費マインド系をカバー。
+> **最新版ハイライト（v0.17.0）**: `get_economic_events_today` に **中銀高官の発言・講演**カテゴリ（`category: "centralbank"`）を新設。FRB 理事・地区連銀総裁・日銀審議委員・ECB 専務理事などの登壇を `speaker` / `speakerRole` / `votingMember`（当該会合での投票権の有無）付きで返す。指標・金融政策会合とは別系統で、注目度の高い発言を手動で随時追記。
+>
+> **v0.16.0**: `get_economic_events_today`（手動キュレーション経済カレンダー）に **米 消費者信頼感指数**（Conference Board・毎月最終火曜）と **ミシガン大消費者態度指数**（速報=第 2 金曜 / 確報=第 4 金曜）を追加。為替で注目度の高い米消費マインド系をカバー。
 >
 > **v0.15.0**: `get_economic_release_pulse` に **DOL/ETA 新規失業保険申請件数**（週次・毎週木 08:30 ET）と **S&P Global 米 PMI 速報**（製造業/サービス業 flash, 09:45 ET）を追加し、従来取りこぼしていた網羅性の穴を解消。
 >
@@ -65,7 +67,7 @@ Claude / GPT / Cursor との対話のなかで、たとえば次のような問�
 
 | ツール名 | 説明 |
 |---|---|
-| `get_economic_events_today` | 当日 or 今週の経済イベント（FOMC・日銀金融政策決定会合・米雇用統計・CPI・GDP・米 消費者信頼感指数（CB / ミシガン大）・中国 PMI 等）を重要度付きで返す。`category` で `macro` / `policy` に絞り込み可能。期間イベント（ジャクソンホール会議等）は `endDate` で複数日対応。半年分を手動キュレーション |
+| `get_economic_events_today` | 当日 or 今週の経済イベント（FOMC・日銀金融政策決定会合・米雇用統計・CPI・GDP・米 消費者信頼感指数（CB / ミシガン大）・中国 PMI 等）に加え、**中銀高官の発言・講演**（FRB 理事・地区連銀総裁・日銀審議委員・ECB 専務理事等。`speaker` / `speakerRole` / `votingMember` 付き）を重要度付きで返す。`category` で `macro` / `policy` / `centralbank` に絞り込み可能。期間イベント（ジャクソンホール会議等）は `endDate` で複数日対応。半年分を手動キュレーション |
 | `get_economic_release_pulse` | **公式機関の発表予定を実取得**: BEA / NY 連銀 / FRB / **BLS（PFEI 経由）** / **DOL/ETA（新規失業保険申請件数）** / **S&P Global（製造業・サービス業 PMI 速報）** / 内閣府 / 日銀 のカレンダーを並列取得し、本日・今週・今月の経済指標リリース予定を統合して返す。BLS 三大指標は v0.14.0 で PFEI Schedule 統合、DOL/ETA・S&P Global は v0.15.0 で追加（前者は木曜計算 + 祝日補正、後者は公式カレンダー手転記） |
 | `get_us_macro_latest` | **米マクロ 7 系列の最新発表値**: 雇用統計・失業率・CPI・コア CPI・PPI・コア PPI・平均時給 を BLS Public Data API v2 から 1 リクエストで取得。値 + 前月比 + 前年同月比を返す。API key 不要・無認証 1 日 25 リクエスト・6 時間キャッシュ |
 

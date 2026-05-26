@@ -107,7 +107,9 @@ export type Snapshot = {
 export type EventImportance = 1 | 2 | 3;
 export type Country = "JP" | "US" | "CN" | "EU" | "GB" | "OTHER";
 // v0.7.0 で追加。macro=マクロ経済指標、geopolitical=要人訪問・首脳会談・地政学日程、policy=政治・政策イベント（選挙・予算・サミット等）
-export type EventCategory = "macro" | "geopolitical" | "policy";
+// v0.17.0 で追加。centralbank=中銀高官の発言・講演（FRB 理事 / 地区連銀総裁 / 日銀審議委員 / ECB 専務理事等）。
+//   指標・金融政策会合とは別系統。予定が流動的なため注目度の高いものだけ手動で随時追記する。
+export type EventCategory = "macro" | "geopolitical" | "policy" | "centralbank";
 
 export type EconomicEvent = {
   date: string;
@@ -119,6 +121,14 @@ export type EconomicEvent = {
   importance: EventImportance;
   // v0.7.0 で追加。省略時は "macro" 扱い（後方互換）
   category?: EventCategory;
+  // v0.17.0 で追加。category: "centralbank" の発言イベントで使う発言者メタ。
+  // speaker=発言者名（例: "ローガン" / "クック"）。
+  speaker?: string;
+  // speakerRole=役職（例: "ダラス連銀総裁" / "FRB 理事" / "日銀審議委員"）。
+  speakerRole?: string;
+  // votingMember=当該会合（FOMC / 日銀政策委員会 / ECB 理事会）での投票権の有無。
+  //   投票権ありの発言ほど政策の方向性を示唆しやすく、市場インパクトの目安になる。
+  votingMember?: boolean;
   note?: string;
   forecast?: string;
   actual?: string;

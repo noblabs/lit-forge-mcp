@@ -137,6 +137,15 @@ export const ECONOMIC_EVENTS: readonly EconomicEvent[] = [
   { date: "2026-10-09", time: "23:00", country: "US", name: "米 ミシガン大消費者態度指数・速報（10 月）", importance: 2 },
   { date: "2026-10-23", time: "23:00", country: "US", name: "米 ミシガン大消費者態度指数・確報（10 月）", importance: 1 },
   { date: "2026-10-27", time: "23:00", country: "US", name: "米 CB消費者信頼感指数（10 月）", importance: 2 },
+
+  // ============ 中銀高官 発言・講演（category: "centralbank"）============
+  // FRB 理事 / 地区連銀総裁 / 日銀審議委員 / ECB 専務理事などの発言。指標・金融政策会合とは別系統。
+  // 予定が流動的（直前追加・変更が多い）ため、注目度の高い登壇だけを外部経済カレンダー等から手動で随時追記する。
+  // importance の目安: votingMember=true → ★★（政策の方向性を示唆しやすい）/ false → ★（参考）。
+  // votingMember は当該会合での投票権の有無。発言系は時刻が前後しやすいので time は判明分のみ記載。
+  // 土日例外: 経済イベントの土日チェックは category !== "macro" を除外するため、発言が休日でも登録可。
+  { date: "2026-05-27", country: "US", name: "ローガン ダラス連銀総裁 発言", importance: 2, category: "centralbank", speaker: "ローガン", speakerRole: "ダラス連銀総裁", votingMember: true },
+  { date: "2026-05-27", country: "US", name: "クック FRB 理事 発言", importance: 2, category: "centralbank", speaker: "クック", speakerRole: "FRB 理事", votingMember: true },
 ];
 
 // JST の年月日を yyyy-mm-dd 形式で返す（leaderboard/keys.ts と同一ロジック）。
