@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<weeklyevents>
+	<event>
+		<title>Bank Holiday</title>
+		<country>USD</country>
+		<date><![CDATA[05-27-2026]]></date>
+		<time><![CDATA[All Day]]></time>
+		<impact><![CDATA[Holiday]]></impact>
+		<url><![CDATA[https://www.forexfactory.com/calendar/holiday]]></url>
+	</event>
+	<event>
+		<title>CPI m/m</title>
+		<country>USD</country>
+		<date><![CDATA[05-27-2026]]></date>
+		<time><![CDATA[8:30am]]></time>
+		<impact><![CDATA[High]]></impact>
+		<url><![CDATA[https://www.forexfactory.com/calendar/cpi]]></url>
+	</event>
+	<event>
+		<title>FOMC Member Logan Speaks</title>
+		<country>USD</country>
+		<date><![CDATA[05-27-2026]]></date>
+		<time><![CDATA[9:00am]]></time>
+		<impact><![CDATA[Low]]></impact>
+		<url><![CDATA[https://www.forexfactory.com/calendar/logan]]></url>
+	</event>
+	<event>
+		<title>FOMC Member Cook Speaks</title>
+		<country>USD</country>
+		<date><![CDATA[05-27-2026]]></date>
+		<time><![CDATA[10:00am]]></time>
+		<impact><![CDATA[Low]]></impact>
+	</event>
+	<event>
+		<title>FOMC Member Goolsbee Speaks</title>
+		<country>USD</country>
+		<date><![CDATA[05-27-2026]]></date>
+		<time><![CDATA[12:00pm]]></time>
+		<impact><![CDATA[Low]]></impact>
+	</event>
+	<event>
+		<title>BOJ Gov Ueda Speaks</title>
+		<country>JPY</country>
+		<date><![CDATA[05-27-2026]]></date>
+		<time><![CDATA[6:00am]]></time>
+		<impact><![CDATA[Medium]]></impact>
+	</event>
+	<event>
+		<title>Fed Chair Warsh Speaks</title>
+		<country>USD</country>
+		<date><![CDATA[05-28-2026]]></date>
+		<time><![CDATA[2:00pm]]></time>
+		<impact><![CDATA[Low]]></impact>
+	</event>
+	<event>
+		<title>ECB President Lagarde Speaks</title>
+		<country>EUR</country>
+		<date><![CDATA[05-28-2026]]></date>
+		<time><![CDATA[Tentative]]></time>
+		<impact><![CDATA[Medium]]></impact>
+	</event>
+	<event>
+		<title>FOMC Member Zeta Speaks</title>
+		<country>USD</country>
+		<date><![CDATA[05-28-2026]]></date>
+		<time><![CDATA[3:00pm]]></time>
+		<impact><![CDATA[Medium]]></impact>
+	</event>
+	<event>
+		<title>FOMC Member Kashkari Speaks</title>
+		<country>USD</country>
+		<date><![CDATA[06-10-2026]]></date>
+		<time><![CDATA[9:00am]]></time>
+		<impact><![CDATA[Low]]></impact>
+	</event>
+</weeklyevents>

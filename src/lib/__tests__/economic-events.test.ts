@@ -266,12 +266,8 @@ describe("中銀イベントは公式日程 JSON と一致する", () => {
 
   it("TS 中銀エントリは全て data/central-bank-schedules/*.json に存在する", () => {
     const officialKeys = loadOfficialKeys();
-    const tsCentralBank = ECONOMIC_EVENTS.filter(
-      (e) =>
-        // 中銀高官の「発言」(category: "centralbank") は会合スケジュールではないため突合対象外。
-        // 日銀審議委員・ECB 高官の発言は name に "日銀"/"ECB" を含みうるが JSON には載らない。
-        e.category !== "centralbank" &&
-        CENTRAL_BANK_KEYWORDS.some((kw) => e.name.includes(kw)),
+    const tsCentralBank = ECONOMIC_EVENTS.filter((e) =>
+      CENTRAL_BANK_KEYWORDS.some((kw) => e.name.includes(kw)),
     );
     expect(tsCentralBank.length).toBeGreaterThan(0);
 
@@ -359,15 +355,14 @@ describe("filterByCategory", () => {
     { date: "2026-05-11", country: "US", name: "明示 macro", importance: 2, category: "macro" },
     { date: "2026-05-11", country: "US", name: "geopolitical", importance: 2, category: "geopolitical" },
     { date: "2026-05-11", country: "JP", name: "policy", importance: 2, category: "policy" },
-    { date: "2026-05-11", country: "US", name: "centralbank", importance: 2, category: "centralbank" },
   ];
 
   it("categories 未指定なら全件返す", () => {
-    expect(filterByCategory(mixed, undefined)).toHaveLength(5);
+    expect(filterByCategory(mixed, undefined)).toHaveLength(4);
   });
 
   it("空配列なら全件返す", () => {
-    expect(filterByCategory(mixed, [])).toHaveLength(5);
+    expect(filterByCategory(mixed, [])).toHaveLength(4);
   });
 
   it("macro のみで category 未指定エントリも含める（後方互換）", () => {
@@ -381,48 +376,8 @@ describe("filterByCategory", () => {
     expect(result[0].name).toBe("geopolitical");
   });
 
-  it("centralbank のみで他を除外", () => {
-    const result = filterByCategory(mixed, ["centralbank"]);
-    expect(result).toHaveLength(1);
-    expect(result[0].name).toBe("centralbank");
-  });
-
   it("複数カテゴリ指定の OR フィルタ", () => {
     const result = filterByCategory(mixed, ["geopolitical", "policy"]);
     expect(result.map((e) => e.name).sort()).toEqual(["geopolitical", "policy"]);
-  });
-});
-
-describe("中銀高官発言 (category: centralbank)", () => {
-  const speeches = ECONOMIC_EVENTS.filter((e) => e.category === "centralbank");
-
-  it("centralbank エントリが 1 件以上存在する", () => {
-    expect(speeches.length).toBeGreaterThan(0);
-  });
-
-  it("全ての centralbank エントリは speaker / speakerRole / votingMember を持つ", () => {
-    const offenders = speeches.filter(
-      (e) =>
-        !e.speaker ||
-        !e.speakerRole ||
-        typeof e.votingMember !== "boolean",
-    );
-    if (offenders.length > 0) {
-      const detail = offenders.map((e) => `${e.date} ${e.name}`);
-      throw new Error(
-        `speaker / speakerRole / votingMember が欠けた centralbank エントリが ${offenders.length} 件あります:\n${detail.join("\n")}`,
-      );
-    }
-    expect(offenders).toEqual([]);
-  });
-
-  it("getEventsForDate で発言イベントが取得でき votingMember が保持される", () => {
-    // 2026-05-27 のローガン・ダラス連銀総裁発言（投票権あり）をシードとして検証。
-    const events = getEventsForDate("2026-05-27");
-    const logan = events.find((e) => e.speaker === "ローガン");
-    expect(logan).toBeDefined();
-    expect(logan?.category).toBe("centralbank");
-    expect(logan?.votingMember).toBe(true);
-    expect(logan?.speakerRole).toBe("ダラス連銀総裁");
   });
 });

@@ -181,6 +181,19 @@ npm run update:pfei   # = build + scripts/update-pfei-schedule.mjs
 
 MCP サーバ自体はランタイムで PDF を取りに行かないので、bot ブロックの影響を受けません。
 
+## FOMC 名簿の更新（年初・地区連銀総裁交代時）
+
+`get_central_bank_speakers`（v0.18.0〜）は ForexFactory のフィードを **ランタイムでライブ取得** しますが、米 Fed 発言者の「役職・投票権」だけは `src/lib/fomc-roster.ts` の静的名簿で補完しています。FF は名字 + "FOMC Member" しか持たないためです。
+
+FOMC の投票メンバーは **毎年 1 月にローテーション** するので、**年初**に必ず更新してください。地区連銀総裁の交代（新任・暫定総裁）も随時反映します。
+
+1. 一次ソース [FRB FOMC ページ](https://www.federalreserve.gov/monetarypolicy/fomc.htm) で当年の構成と投票ローテーションを確認（訓練データのハードコードは禁止。現職を必ず一次ソースで裏取り）
+2. `FOMC_ROSTER`（理事 7 名は常に投票 / NY 連銀は常任 / 残り 11 地区連銀から 4 名が当年投票）を更新
+3. `FOMC_ROSTER_YEAR` と `FOMC_ROSTER_LAST_VERIFIED` を当年・当日に更新
+4. `npx vitest run src/lib/__tests__/fomc-roster.test.ts` で不変条件（投票メンバー計 12 名・理事 7 名全員投票・議長 1 名等）を確認
+
+FF に出る名字が名簿に無い場合でも発言自体は素通しで返ります（role/votingMember が付かないだけ）。名簿は enrich 用であり、フィルタではありません。
+
 ## リリース
 
 ```bash

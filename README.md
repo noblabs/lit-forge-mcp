@@ -4,11 +4,11 @@
 [![license](https://img.shields.io/npm/l/lit-forge-mcp.svg)](./LICENSE)
 [![node](https://img.shields.io/node/v/lit-forge-mcp.svg)](https://nodejs.org)
 
-**個人資産形成シミュレーション・主要市況スナップショット・経済指標発表予定・地政学イベント** を、AI から直接呼び出せる Model Context Protocol（MCP）の stdio サーバーです（**18 ツール**）。
+**個人資産形成シミュレーション・主要市況スナップショット・経済指標発表予定・中銀高官発言・地政学イベント** を、AI から直接呼び出せる Model Context Protocol（MCP）の stdio サーバーです（**19 ツール**）。
 
 Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI クライアントで動作します。
 
-> **最新版ハイライト（v0.17.0）**: `get_economic_events_today` に **中銀高官の発言・講演**カテゴリ（`category: "centralbank"`）を新設。FRB 理事・地区連銀総裁・日銀審議委員・ECB 専務理事などの登壇を `speaker` / `speakerRole` / `votingMember`（当該会合での投票権の有無）付きで返す。指標・金融政策会合とは別系統で、注目度の高い発言を手動で随時追記。
+> **最新版ハイライト（v0.18.0）**: 新ツール `get_central_bank_speakers` を追加。ForexFactory の無料カレンダーから**これからの**中銀高官の発言・講演（FRB 理事・地区連銀総裁・日銀・ECB・BOE 等）をライブ取得し、米 Fed は当年 FOMC 名簿で **役職（ダラス連銀総裁等）と投票権の有無** を補完。投票メンバーの発言は重要度を引き上げ（議長=★★★ / 投票メンバー=★★以上）。※ v0.17.0 で `get_economic_events_today` に一時導入した静的 `centralbank` カテゴリは本ツールに一本化（撤去）。
 >
 > **v0.16.0**: `get_economic_events_today`（手動キュレーション経済カレンダー）に **米 消費者信頼感指数**（Conference Board・毎月最終火曜）と **ミシガン大消費者態度指数**（速報=第 2 金曜 / 確報=第 4 金曜）を追加。為替で注目度の高い米消費マインド系をカバー。
 >
@@ -61,13 +61,14 @@ Claude / GPT / Cursor との対話のなかで、たとえば次のような問�
 | `get_dividend_history` | 個別株・ETF の過去 N 年の配当履歴と暦年合計を取得（`years`: 1/3/5/10、既定 5）。NISA 成長投資枠で配当銘柄を検討する一次情報として使用 |
 | `get_analyst_consensus` | 個別株のアナリスト推奨レーティング（強気買い〜強気売り）・目標株価（平均/高値/安値）・月別推奨内訳を取得。米国株は coverage が厚く、TSE 銘柄や ETF は欠損しやすい |
 
-### 経済イベント & マクロ最新値 — 3 ツール
+### 経済イベント・中銀高官発言 & マクロ最新値 — 4 ツール
 
-「**次にいつ発表されるか**」（カレンダー系 2 つ）と「**今の数字はいくつか**」（最新値 1 つ）を分担。
+「**次にいつ発表されるか**」（カレンダー系 2 つ）と「**誰がいつ話すか**」（発言 1 つ）と「**今の数字はいくつか**」（最新値 1 つ）を分担。
 
 | ツール名 | 説明 |
 |---|---|
-| `get_economic_events_today` | 当日 or 今週の経済イベント（FOMC・日銀金融政策決定会合・米雇用統計・CPI・GDP・米 消費者信頼感指数（CB / ミシガン大）・中国 PMI 等）に加え、**中銀高官の発言・講演**（FRB 理事・地区連銀総裁・日銀審議委員・ECB 専務理事等。`speaker` / `speakerRole` / `votingMember` 付き）を重要度付きで返す。`category` で `macro` / `policy` / `centralbank` に絞り込み可能。期間イベント（ジャクソンホール会議等）は `endDate` で複数日対応。半年分を手動キュレーション |
+| `get_economic_events_today` | 当日 or 今週の経済イベント（FOMC・日銀金融政策決定会合・米雇用統計・CPI・GDP・米 消費者信頼感指数（CB / ミシガン大）・中国 PMI 等）を重要度付きで返す。`category` で `macro` / `geopolitical` / `policy` に絞り込み可能。期間イベント（ジャクソンホール会議等）は `endDate` で複数日対応。半年分を手動キュレーション。中銀高官の発言は `get_central_bank_speakers` を使用 |
+| `get_central_bank_speakers` | **これからの中銀高官の発言・講演をライブ取得**: ForexFactory 無料カレンダーから発言系イベント（FRB 理事・地区連銀総裁・日銀・ECB・BOE 等）を抽出。米 Fed は当年 FOMC 名簿で **role（ダラス連銀総裁等）/ votingMember（投票権の有無）** を補完し、投票メンバーは重要度を引き上げ（議長=★★★ / 投票メンバー=★★以上）。`range`（today/week）・`countries`（US/JP/EU/GB/CN/OTHER）で絞り込み。6 時間キャッシュ |
 | `get_economic_release_pulse` | **公式機関の発表予定を実取得**: BEA / NY 連銀 / FRB / **BLS（PFEI 経由）** / **DOL/ETA（新規失業保険申請件数）** / **S&P Global（製造業・サービス業 PMI 速報）** / 内閣府 / 日銀 のカレンダーを並列取得し、本日・今週・今月の経済指標リリース予定を統合して返す。BLS 三大指標は v0.14.0 で PFEI Schedule 統合、DOL/ETA・S&P Global は v0.15.0 で追加（前者は木曜計算 + 祝日補正、後者は公式カレンダー手転記） |
 | `get_us_macro_latest` | **米マクロ 7 系列の最新発表値**: 雇用統計・失業率・CPI・コア CPI・PPI・コア PPI・平均時給 を BLS Public Data API v2 から 1 リクエストで取得。値 + 前月比 + 前年同月比を返す。API key 不要・無認証 1 日 25 リクエスト・6 時間キャッシュ |
 
@@ -82,7 +83,7 @@ Claude / GPT / Cursor との対話のなかで、たとえば次のような問�
 
 ## HTTP 通信について
 
-市況・分析・個別株系ツールは **Yahoo Finance API（query1.finance.yahoo.com / query2.finance.yahoo.com）** へ、`get_us_macro_latest` は **BLS Public Data API v2（api.bls.gov）** へ、`get_economic_release_pulse` は **各公式機関のカレンダーページ**へ、`get_geopolitical_pulse` は **BBC / Al Jazeera / Google News の RSS** へ HTTPS リクエストを送信します。実行 PC のネットワークから外部に出る通信が発生する点にご留意ください。
+市況・分析・個別株系ツールは **Yahoo Finance API（query1.finance.yahoo.com / query2.finance.yahoo.com）** へ、`get_us_macro_latest` は **BLS Public Data API v2（api.bls.gov）** へ、`get_economic_release_pulse` は **各公式機関のカレンダーページ**へ、`get_geopolitical_pulse` は **BBC / Al Jazeera / Google News の RSS** へ、`get_central_bank_speakers` は **ForexFactory 無料カレンダー（nfs.faireconomy.media）** へ HTTPS リクエストを送信します。実行 PC のネットワークから外部に出る通信が発生する点にご留意ください。
 
 データは数十分〜1 時間遅れの参考値で、**投資助言ではなく情報集約**として提供しています。
 
@@ -173,6 +174,10 @@ Claude にこんな依頼ができます:
 - 「今週の経済イベントは？特に FOMC や日銀の予定を教えて」
 - 「**次の雇用統計はいつ？**」「**今月の FRB と内閣府の発表予定をまとめて**」
 - 「**直近の CPI と PPI を前月比・前年同月比で**」「**コア CPI とコア PPI を比較して**」
+
+**中銀高官の発言**
+- 「**今日の Fed 要人発言は？投票権ありの人だけ教えて**」「**今週の中銀スピーカー一覧**」（`get_central_bank_speakers`）
+- 「**今週ラガルド ECB 総裁や日銀の発言予定はある？**」（`countries=["EU","JP"]` で絞り込み）
 
 **地政学イベント**
 - 「今週の地政学イベントは？」「今月の G7 サミットの予定は？」

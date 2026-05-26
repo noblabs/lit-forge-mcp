@@ -17,6 +17,8 @@
 // v0.14.1 で README / package.json keywords を 4 本柱（資産形成 + 市況 + 経済指標 + 地政学）に全面刷新、18 ツール表記に統一。
 // v0.14.2 で description / keywords の追加整合。
 // v0.14.3 で src/index.ts の version ハードコード撤廃 → package.json から動的読み込みに変更（以降の bump で自動同期）。server.json 側は手動同期。
+// v0.18.0 で get_central_bank_speakers を新設（中銀高官の発言・講演を ForexFactory ライブ取得、米 Fed は当年 FOMC 名簿で役職/投票権を補完）。18 → 19 ツール。
+//   ※ v0.17.0 で get_economic_events_today に一時導入した静的 centralbank カテゴリは本ツールに一本化し撤去。
 
 import { simulateNisaTool } from "./simulate-nisa.js";
 import { planRetirementTool } from "./plan-retirement.js";
@@ -36,6 +38,7 @@ import { getGeopoliticalCalendarTool } from "./get-geopolitical-calendar.js";
 import { getGeopoliticalPulseTool } from "./get-geopolitical-pulse.js";
 import { getEconomicReleasePulseTool } from "./get-economic-release-pulse.js";
 import { getUsMacroLatestTool } from "./get-us-macro-latest.js";
+import { getCentralBankSpeakersTool } from "./get-central-bank-speakers.js";
 
 export const tools = [
   simulateNisaTool,
@@ -61,4 +64,6 @@ export const tools = [
   getEconomicReleasePulseTool,
   // v0.13.0 新規・v0.14.0 で 4→7 系列拡張: 米マクロ最新値（BLS Public Data API v2、雇用統計・失業率・CPI・コア CPI・PPI・コア PPI・平均時給）
   getUsMacroLatestTool,
+  // v0.18.0 新規: 中銀高官の発言・講演スケジュール（ForexFactory ライブ取得 + 当年 FOMC 名簿で役職/投票権を補完）
+  getCentralBankSpeakersTool,
 ];
