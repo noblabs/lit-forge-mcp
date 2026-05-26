@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.noblabs/lit-forge-mcp",
-  "description": "Personal asset planning, market snapshot, economic releases, central bank speakers, US macro, geopolitical. 19 tools.",
+  "description": "Asset planning, market data, econ releases, central bank speakers, US macro, geopolitical. 19 tools.",
   "repository": {
     "url": "https://github.com/noblabs/lit-forge-mcp",
     "source": "github"
