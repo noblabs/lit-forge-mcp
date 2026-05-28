@@ -11,6 +11,7 @@ import { parseEmpireStateTable } from "../economic-release-pulse/adapters/nyfed.
 import { parseG17Releases } from "../economic-release-pulse/adapters/frb.js";
 import { computeJoblessClaimsReleases } from "../economic-release-pulse/adapters/dol-eta.js";
 import { spGlobalPmiToReleaseEvents } from "../economic-release-pulse/adapters/sp-global-pmi.js";
+import { parseCensusAdvanceTable } from "../economic-release-pulse/adapters/census.js";
 import {
   jstParts,
   jstToday,
@@ -291,5 +292,67 @@ describe("spGlobalPmiToReleaseEvents", () => {
         sourceUrl: "https://www.pmi.spglobal.com/",
       });
     }
+  });
+});
+
+describe("parseCensusAdvanceTable", () => {
+  // 公式 List View HTML の実構造を模した fixture。
+  // 対象行（Advance Economic Indicators Report）+ 紛らわしい非対象行を 2 つ混ぜ、
+  // パーサが Advance 行だけを拾うことを検証する。
+  const FIXTURE = `
+    <table class="sortable">
+    <tr height="20">
+      <td height="20"><a href="/manufacturing/m3/">Advance Report on Durable Goods--Manufacturers' Shipments, Inventories, and Orders</a></td>
+      <td sorttable_customkey="202605260830">May 26, 2026</td><td>8:30 AM</td><td>April 2026</td>
+    </tr>
+    <tr height="20">
+      <td height="20"><a href="/econ/indicators/">Advance Economic Indicators Report (International Trade, Retail, &amp; Wholesale)</a></td>
+      <td sorttable_customkey="202605290830">May 29, 2026</td><td>8:30 AM</td><td>April 2026</td>
+    </tr>
+    <tr height="20">
+      <td height="20"><a href="/wholesale/">Wholesale Trade: Sales and Inventories</a></td>
+      <td sorttable_customkey="202606091000">June 9, 2026</td><td>10:00 AM</td><td>April 2026</td>
+    </tr>
+    <tr height="20">
+      <td height="20"><a href="/econ/indicators/">Advance Economic Indicators Report (International Trade, Retail, &amp; Wholesale)</a></td>
+      <td sorttable_customkey="202606260830">June 26, 2026</td><td>8:30 AM</td><td>May 2026</td>
+    </tr>
+    </table>`;
+
+  it("Advance 行だけを 3 速報（卸売在庫・小売在庫・財貿易収支）に展開する（08:30 ET → 21:30 JST 同日, DST 期間）", () => {
+    const events = parseCensusAdvanceTable(FIXTURE);
+    // 対象 2 行 × 3 系列 = 6 件。耐久財速報・確報卸売は拾わない。
+    expect(events).toHaveLength(6);
+
+    const may29 = events.filter((e) => e.date === "2026-05-29");
+    expect(may29).toHaveLength(3);
+    expect(may29.map((e) => e.name).sort()).toEqual([
+      "米 卸売在庫（速報）",
+      "米 小売在庫（速報）",
+      "米 貿易収支（財・速報）",
+    ]);
+    for (const e of may29) {
+      expect(e).toMatchObject({
+        date: "2026-05-29",
+        time: "21:30",
+        country: "US",
+        source: "U.S. Census Bureau（Advance Economic Indicators Report）",
+        sourceUrl:
+          "https://www.census.gov/economic-indicators/calendar-listview.html",
+      });
+    }
+  });
+
+  it("翌月（6/26）も同様に拾う＝ライブ HTML 由来で未来も自動対応", () => {
+    const jun26 = parseCensusAdvanceTable(FIXTURE).filter(
+      (e) => e.date === "2026-06-26",
+    );
+    expect(jun26).toHaveLength(3);
+    expect(jun26.every((e) => e.time === "21:30")).toBe(true);
+  });
+
+  it("該当行が無ければ空配列（紛らわしい行だけの HTML）", () => {
+    const noAdvance = `<tr><td><a href="/x">Wholesale Trade: Sales and Inventories</a></td><td sorttable_customkey="202606091000">June 9, 2026</td></tr>`;
+    expect(parseCensusAdvanceTable(noAdvance)).toEqual([]);
   });
 });
