@@ -16,7 +16,7 @@ import { nyfedAdapter } from "./adapters/nyfed.js";
 import { frbAdapter } from "./adapters/frb.js";
 import { pfeiAdapter } from "./adapters/pfei.js";
 import { dolEtaAdapter } from "./adapters/dol-eta.js";
-import { spGlobalPmiAdapter } from "./adapters/sp-global-pmi.js";
+import { faireconomyAdapter } from "./adapters/faireconomy.js";
 import { censusAdapter } from "./adapters/census.js";
 
 // 登録アダプタ。新ソース追加時はここに 1 行足す。
@@ -29,7 +29,7 @@ const ADAPTERS: readonly ReleaseAdapter[] = [
   frbAdapter,
   pfeiAdapter,
   dolEtaAdapter,
-  spGlobalPmiAdapter,
+  faireconomyAdapter,
   censusAdapter,
 ];
 

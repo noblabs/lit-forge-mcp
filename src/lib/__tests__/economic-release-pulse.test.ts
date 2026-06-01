@@ -10,7 +10,12 @@ import {
 import { parseEmpireStateTable } from "../economic-release-pulse/adapters/nyfed.js";
 import { parseG17Releases } from "../economic-release-pulse/adapters/frb.js";
 import { computeJoblessClaimsReleases } from "../economic-release-pulse/adapters/dol-eta.js";
-import { spGlobalPmiToReleaseEvents } from "../economic-release-pulse/adapters/sp-global-pmi.js";
+import {
+  ffTitleToName,
+  parseFfClock,
+  ffEventToRelease,
+  selectFaireconomyEvents,
+} from "../economic-release-pulse/adapters/faireconomy.js";
 import { parseCensusAdvanceTable } from "../economic-release-pulse/adapters/census.js";
 import {
   jstParts,
@@ -273,25 +278,108 @@ describe("computeJoblessClaimsReleases", () => {
   });
 });
 
-describe("spGlobalPmiToReleaseEvents", () => {
-  it("flash 発表日を製造業速報・サービス業速報の 2 件に展開する（09:45 ET → 22:45 JST 同日）", () => {
-    const events = spGlobalPmiToReleaseEvents();
-    // 確認済みの 2026-05-21 分（製造業 + サービス業）を検証。
-    const may21 = events.filter((e) => e.date === "2026-05-21");
-    expect(may21).toHaveLength(2);
-    expect(may21.map((e) => e.name).sort()).toEqual([
-      "米 サービス業PMI（速報）",
-      "米 製造業PMI（速報）",
+describe("parseFfClock", () => {
+  it("am/pm を 24 時間表記に変換する", () => {
+    expect(parseFfClock("2:00pm")).toEqual({ h: 14, m: 0 });
+    expect(parseFfClock("10:30am")).toEqual({ h: 10, m: 30 });
+    expect(parseFfClock("12:00am")).toEqual({ h: 0, m: 0 });
+    expect(parseFfClock("12:00pm")).toEqual({ h: 12, m: 0 });
+  });
+  it("時刻でない値（All Day/Tentative/空）は null", () => {
+    expect(parseFfClock("All Day")).toBeNull();
+    expect(parseFfClock("Tentative")).toBeNull();
+    expect(parseFfClock("")).toBeNull();
+  });
+});
+
+describe("ffTitleToName", () => {
+  it("対象の米指標タイトルだけを日本語名に変換する（完全一致）", () => {
+    expect(ffTitleToName("JOLTS Job Openings")).toBe("米 JOLTS（求人件数）");
+    expect(ffTitleToName("ISM Manufacturing PMI")).toBe("米 ISM製造業景況指数");
+    expect(ffTitleToName("ISM Services PMI")).toBe("米 ISM非製造業景況指数");
+    expect(ffTitleToName("Flash Services PMI")).toBe("米 サービス業PMI（速報）");
+    expect(ffTitleToName("CB Consumer Confidence")).toBe("米 消費者信頼感指数（CB）");
+    expect(ffTitleToName("ADP Non-Farm Employment Change")).toBe(
+      "米 ADP雇用統計（民間部門）",
+    );
+  });
+  it("PFEI/DOL 等が既出の指標や紛らわしい部分一致は対象外（null）", () => {
+    // PFEI が出す → 重複防止のため対象外
+    expect(ffTitleToName("Non-Farm Employment Change")).toBeNull();
+    expect(ffTitleToName("CPI m/m")).toBeNull();
+    // DOL/ETA が出す → 対象外
+    expect(ffTitleToName("Unemployment Claims")).toBeNull();
+    // 部分一致の誤爆防止（"ISM Manufacturing Prices" は PMI ではない）
+    expect(ffTitleToName("ISM Manufacturing Prices")).toBeNull();
+    expect(ffTitleToName("Final Manufacturing PMI")).toBeNull();
+  });
+});
+
+describe("ffEventToRelease", () => {
+  it("GMT 時刻を JST に変換する（夏時間: 06-02 2:00pm GMT = 10:00 EDT → 23:00 JST 同日）", () => {
+    const r = ffEventToRelease({
+      title: "JOLTS Job Openings",
+      country: "USD",
+      date: "06-02-2026",
+      time: "2:00pm",
+      impact: "Medium",
+      url: "https://www.forexfactory.com/calendar/578-us-jolts-job-openings",
+    });
+    expect(r).toEqual({
+      date: "2026-06-02",
+      time: "23:00",
+      country: "US",
+      name: "米 JOLTS（求人件数）",
+      source: "ForexFactory",
+      sourceUrl: "https://www.forexfactory.com/calendar/578-us-jolts-job-openings",
+    });
+  });
+
+  it("標準時の発表は日跨ぎを正しく処理する（12-01 3:00pm GMT = 10:00 EST → 00:00 JST 翌日）", () => {
+    const r = ffEventToRelease({
+      title: "ISM Manufacturing PMI",
+      country: "USD",
+      date: "12-01-2026",
+      time: "3:00pm",
+      impact: "High",
+    });
+    expect(r).toMatchObject({
+      date: "2026-12-02",
+      time: "00:00",
+      country: "US",
+      name: "米 ISM製造業景況指数",
+      source: "ForexFactory",
+    });
+  });
+
+  it("対象外 / USD でない / 時刻不明は除外（null）", () => {
+    // マップ外（PFEI が出す）
+    expect(
+      ffEventToRelease({ title: "Non-Farm Employment Change", country: "USD", date: "06-05-2026", time: "1:30pm", impact: "High" }),
+    ).toBeNull();
+    // USD でない（EU の ISM 相当は無いが、country で弾く確認）
+    expect(
+      ffEventToRelease({ title: "Flash Services PMI", country: "EUR", date: "06-23-2026", time: "9:00am", impact: "High" }),
+    ).toBeNull();
+    // 時刻不明
+    expect(
+      ffEventToRelease({ title: "JOLTS Job Openings", country: "USD", date: "06-02-2026", time: "All Day", impact: "Medium" }),
+    ).toBeNull();
+  });
+
+  it("selectFaireconomyEvents は混在フィードから対象指標だけを抽出する", () => {
+    const events = [
+      { title: "Unemployment Claims", country: "USD", date: "06-04-2026", time: "12:30pm", impact: "Medium" }, // DOL 担当→対象外
+      { title: "JOLTS Job Openings", country: "USD", date: "06-02-2026", time: "2:00pm", impact: "Medium" },
+      { title: "ISM Services PMI", country: "USD", date: "06-03-2026", time: "3:00pm", impact: "High" },
+      { title: "FOMC Member Logan Speaks", country: "USD", date: "06-02-2026", time: "5:00pm", impact: "Low" }, // 発言→対象外
+      { title: "German Final Services PMI", country: "EUR", date: "06-03-2026", time: "8:55am", impact: "Medium" }, // 非USD→対象外
+    ];
+    const out = selectFaireconomyEvents(events);
+    expect(out.map((e) => e.name).sort()).toEqual([
+      "米 ISM非製造業景況指数",
+      "米 JOLTS（求人件数）",
     ]);
-    for (const e of may21) {
-      expect(e).toMatchObject({
-        date: "2026-05-21",
-        time: "22:45",
-        country: "US",
-        source: "S&P Global",
-        sourceUrl: "https://www.pmi.spglobal.com/",
-      });
-    }
   });
 });
 

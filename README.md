@@ -8,7 +8,9 @@
 
 Claude Desktop / Claude Code / Cursor など、MCP に対応した任意の AI クライアントで動作します。
 
-> **最新版ハイライト（v0.19.0）**: `get_economic_release_pulse` に **米センサス局**（U.S. Census Bureau）の **Advance Economic Indicators Report**（卸売在庫・小売在庫・財貿易収支の**速報値**、月次 08:30 ET）を追加し、従来どのアダプタも拾えなかった「米 卸売在庫【速報値】」等の網羅性の穴を解消。発表日は公式リリースカレンダー（List View）を**ランタイムでライブ取得**するため、翌年以降の日程も公式ページ更新に追随（手動更新不要）。
+> **最新版ハイライト（v0.20.0）**: `get_economic_release_pulse` に **ForexFactory ライブアダプタ**を新設。**米 JOLTS 求人件数**（PFEI 非収録のため従来取りこぼし）を動的取得で追加し、あわせて **S&P Global PMI 速報**を静的手転記から**ライブ取得に置換**（半年手動更新を廃止）、さらに **ISM 製造業/非製造業・消費者信頼感（CB/ミシガン大）・ADP 雇用**を pulse にライブ追加。発表日は faireconomy 週次カレンダー XML を**ランタイム取得**するため将来分の手動追記が不要。GMT→JST 変換で日跨ぎも正確。※ BLS 三大指標（雇用統計・CPI・PPI）は官製一次ソースの **PFEI** を正として据え置き。
+>
+> **v0.19.0**: `get_economic_release_pulse` に **米センサス局**（U.S. Census Bureau）の **Advance Economic Indicators Report**（卸売在庫・小売在庫・財貿易収支の**速報値**、月次 08:30 ET）を追加し、従来どのアダプタも拾えなかった「米 卸売在庫【速報値】」等の網羅性の穴を解消。発表日は公式リリースカレンダー（List View）を**ランタイムでライブ取得**するため、翌年以降の日程も公式ページ更新に追随（手動更新不要）。
 >
 > **v0.18.0**: 新ツール `get_central_bank_speakers` を追加。ForexFactory の無料カレンダーから**これからの**中銀高官の発言・講演（FRB 理事・地区連銀総裁・日銀・ECB・BOE 等）をライブ取得し、米 Fed は当年 FOMC 名簿で **役職（ダラス連銀総裁等）と投票権の有無** を補完。投票メンバーの発言は重要度を引き上げ（議長=★★★ / 投票メンバー=★★以上）。※ v0.17.0 で `get_economic_events_today` に一時導入した静的 `centralbank` カテゴリは本ツールに一本化（撤去）。
 >
@@ -71,7 +73,7 @@ Claude / GPT / Cursor との対話のなかで、たとえば次のような問�
 |---|---|
 | `get_economic_events_today` | 当日 or 今週の経済イベント（FOMC・日銀金融政策決定会合・米雇用統計・CPI・GDP・米 消費者信頼感指数（CB / ミシガン大）・中国 PMI 等）を重要度付きで返す。`category` で `macro` / `geopolitical` / `policy` に絞り込み可能。期間イベント（ジャクソンホール会議等）は `endDate` で複数日対応。半年分を手動キュレーション。中銀高官の発言は `get_central_bank_speakers` を使用 |
 | `get_central_bank_speakers` | **これからの中銀高官の発言・講演をライブ取得**: ForexFactory 無料カレンダーから発言系イベント（FRB 理事・地区連銀総裁・日銀・ECB・BOE 等）を抽出。米 Fed は当年 FOMC 名簿で **role（ダラス連銀総裁等）/ votingMember（投票権の有無）** を補完し、投票メンバーは重要度を引き上げ（議長=★★★ / 投票メンバー=★★以上）。`range`（today/week）・`countries`（US/JP/EU/GB/CN/OTHER）で絞り込み。6 時間キャッシュ |
-| `get_economic_release_pulse` | **公式機関の発表予定を実取得**: BEA / NY 連銀 / FRB / **BLS（PFEI 経由）** / **DOL/ETA（新規失業保険申請件数）** / **S&P Global（製造業・サービス業 PMI 速報）** / **センサス局（卸売在庫・小売在庫・財貿易収支の速報）** / 内閣府 / 日銀 のカレンダーを並列取得し、本日・今週・今月の経済指標リリース予定を統合して返す。BLS 三大指標は v0.14.0 で PFEI Schedule 統合、DOL/ETA・S&P Global は v0.15.0 で追加、センサス局 Advance Economic Indicators は v0.19.0 で追加（公式 List View をライブ取得・翌年分も自動） |
+| `get_economic_release_pulse` | **公式機関の発表予定を実取得**: BEA / NY 連銀 / FRB / **BLS（PFEI 経由）** / **DOL/ETA（新規失業保険申請件数）** / **ForexFactory ライブ（JOLTS 求人件数・製造業/サービス業 PMI 速報・ISM 製造業/非製造業・消費者信頼感〔CB/ミシガン大〕・ADP 雇用）** / **センサス局（卸売在庫・小売在庫・財貿易収支の速報）** / 内閣府 / 日銀 のカレンダーを並列取得し、本日・今週・今月の経済指標リリース予定を統合して返す。BLS 三大指標は v0.14.0 で PFEI Schedule 統合、センサス局 Advance Economic Indicators は v0.19.0 で追加、v0.20.0 で ForexFactory ライブアダプタを新設（JOLTS 追加・S&P PMI 速報をライブ化・ISM/消費者信頼感/ADP を追加） |
 | `get_us_macro_latest` | **米マクロ 7 系列の最新発表値**: 雇用統計・失業率・CPI・コア CPI・PPI・コア PPI・平均時給 を BLS Public Data API v2 から 1 リクエストで取得。値 + 前月比 + 前年同月比を返す。API key 不要・無認証 1 日 25 リクエスト・6 時間キャッシュ |
 
 ### 地政学 — 2 ツール
